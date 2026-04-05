@@ -7,7 +7,42 @@ from reportlab.lib.pagesizes import letter
 # =========================
 # CONFIG
 # =========================
-st.set_page_config(page_title="Risk Survey System", layout="wide")
+st.set_page_config(page_title="Equity Risk Survey System", layout="wide")
+
+# =========================
+# EQUITY BANK STYLING
+# =========================
+st.markdown("""
+<style>
+body {
+    background-color: #0E1117;
+}
+
+h1, h2, h3 {
+    color: #008751;
+}
+
+.stButton>button {
+    background-color: #008751;
+    color: white;
+    border-radius: 8px;
+    height: 3em;
+    width: 100%;
+    font-weight: bold;
+}
+.stButton>button:hover {
+    background-color: #006F42;
+}
+
+.stProgress > div > div {
+    background-color: #008751;
+}
+
+input, textarea {
+    border-radius: 8px !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # =========================
 # SESSION INIT
@@ -49,27 +84,35 @@ def save_progress():
 section = sections[st.session_state.step]
 
 # =========================
-# UI
+# UI HEADER
 # =========================
 progress = st.session_state.step / (len(sections) - 1)
 st.progress(progress)
-st.title("📊 Risk Survey System")
+
+st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 
 # =========================
-# WELCOME
+# WELCOME (UPDATED WITH LOGO)
 # =========================
 if section == "Welcome":
+
+    # ✅ LOGO DISPLAY
+    st.image("/Users/andrewsifuna/Desktop/equity_logo.png", width=300)
+
     placeholder = st.empty()
-    for i in range(40):
+
+    for i in range(30):
         y_anim = math.sin(i / 5) * 10
         placeholder.markdown(
-            f"<h1 style='text-align:center; transform: translateY({y_anim}px);'>Welcome to EGIK Risk Survey</h1>",
+            f"<h2 style='text-align:center; color:#008751; transform: translateY({y_anim}px);'>Welcome to Equity Risk Survey</h2>",
             unsafe_allow_html=True
         )
-        time.sleep(0.05)
+        time.sleep(0.03)
+
+    st.markdown("### Click Next to begin")
 
 # =========================
-# CLIENT
+# CLIENT INFO
 # =========================
 elif section == "Client Info":
     st.header("Client Information")
@@ -89,7 +132,7 @@ elif section == "Business Overview":
     d["background"] = st.text_area("Background", d.get("background", ""))
 
 # =========================
-# OTHER SECTIONS (UNCHANGED)
+# OTHER SECTIONS
 # =========================
 elif section == "Site Buildings":
     st.header("Site Buildings")
@@ -181,7 +224,7 @@ elif section == "Interruption Analysis":
     d["interruption"] = st.text_area("Interruption")
 
 # =========================
-# SUBMIT (FIXED)
+# SUBMIT
 # =========================
 elif section == "Submit":
 
@@ -197,9 +240,11 @@ elif section == "Submit":
                 c.showPage()
                 y = 750
 
+            c.setFont("Helvetica-Bold", 11)
             c.drawString(40, y, title)
             y -= 15
 
+            c.setFont("Helvetica", 10)
             c.drawString(60, y, str(value))
             y -= 25
 
@@ -211,10 +256,10 @@ elif section == "Submit":
         c.save()
 
         with open("risk_report.pdf", "rb") as f:
-            st.download_button("Download Report", f, "risk_report.pdf")
+            st.download_button("⬇️ Download Report", f, "risk_report.pdf")
 
 # =========================
-# NAV
+# NAVIGATION
 # =========================
 col1, col2, col3 = st.columns(3)
 
@@ -223,8 +268,8 @@ with col1:
         st.button("⬅️ Previous", on_click=prev_step)
 
 with col2:
-    st.button("💾 Save for Later", on_click=save_progress)
+    st.button("💾 Save", on_click=save_progress)
 
 with col3:
     if st.session_state.step < len(sections) - 1:
-        st.button("➡️ Next", on_click=next_step)
+        st.button("Next ➡️", on_click=next_step)
