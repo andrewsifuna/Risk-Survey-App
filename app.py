@@ -1,4 +1,6 @@
 import streamlit as st
+import time
+import math
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
@@ -6,180 +8,226 @@ from reportlab.lib.pagesizes import letter
 # CONFIG
 # =========================
 st.set_page_config(page_title="Risk Survey System", layout="wide")
-st.title("📊 Risk Survey System")
 
 # =========================
-# SECTIONS LIST
+# SESSION INIT
+# =========================
+if "step" not in st.session_state:
+    st.session_state.step = 0
+
+if "data" not in st.session_state:
+    st.session_state.data = {}
+
+d = st.session_state.data
+
+# =========================
+# SECTIONS ORDER
 # =========================
 sections = [
+    "Welcome",
     "Client Info",
     "Contacts & Control",
     "Business Overview",
     "Assets",
     "Fire",
-    "Security",
-    "Employees",
-    "Health & Safety",
-    "Liability",
     "Engineering",
-    "Financial Risk",
-    "Environmental",
-    "Cyber",
-    "Loss History",
-    "Business Continuity",
     "Submit"
 ]
 
 # =========================
-# SESSION STATE
+# NAVIGATION FUNCTIONS
 # =========================
-if "data" not in st.session_state:
-    st.session_state.data = {}
+def next_step():
+    if st.session_state.step < len(sections) - 1:
+        st.session_state.step += 1
 
-if "step_index" not in st.session_state:
-    st.session_state.step_index = 0
+def prev_step():
+    if st.session_state.step > 0:
+        st.session_state.step -= 1
 
-d = st.session_state.data
-section = sections[st.session_state.step_index]
+def save_progress():
+    st.success("Progress saved!")
+
+section = sections[st.session_state.step]
 
 # =========================
 # PROGRESS BAR
 # =========================
-st.progress((st.session_state.step_index + 1) / len(sections))
-st.subheader(f"{section}")
+progress = st.session_state.step / (len(sections) - 1)
+st.progress(progress)
+
+st.title("📊 Risk Survey System")
 
 # =========================
-# SECTIONS CONTENT
+# 1. WELCOME PAGE
 # =========================
-if section == "Client Info":
-    d["insured"] = st.text_input("Insured Name")
-    d["address"] = st.text_input("Physical Address")
-    d["gps"] = st.text_input("GPS Coordinates")
-    d["distance"] = st.text_input("Distance from Town")
+if section == "Welcome":
 
+    placeholder = st.empty()
+
+    for i in range(40):
+        y_anim = math.sin(i / 5) * 10
+        placeholder.markdown(
+            f"<h1 style='text-align:center; transform: translateY({y_anim}px);'>"
+            f"Welcome to EGIK Risk Survey</h1>",
+            unsafe_allow_html=True
+        )
+        time.sleep(0.05)
+
+    st.markdown("### Click Next to begin")
+
+# =========================
+# CLIENT INFO
+# =========================
+elif section == "Client Info":
+
+    st.header("Client Information")
+
+    d["insured"] = st.text_input("Insured Name", d.get("insured", ""))
+    d["address"] = st.text_input("Physical Address", d.get("address", ""))
+    d["gps"] = st.text_input("GPS Coordinates", d.get("gps", ""))
+    d["distance"] = st.text_input("Distance from Town", d.get("distance", ""))
+
+    st.subheader("📸 Take Front Photo")
+    d["client_photo"] = st.camera_input("Capture Front View")
+
+# =========================
+# CONTACTS
+# =========================
 elif section == "Contacts & Control":
-    d["contacts"] = st.text_area("Contact Persons")
-    d["documents"] = st.text_area("Document Control")
-    d["communications"] = st.text_area("Communications")
 
+    st.header("Contacts & Control")
+
+    d["contacts"] = st.text_area("Contacts", d.get("contacts", ""))
+    d["documents"] = st.text_area("Documents", d.get("documents", ""))
+    d["communications"] = st.text_area("Communications", d.get("communications", ""))
+
+# =========================
+# BUSINESS
+# =========================
 elif section == "Business Overview":
-    d["business"] = st.text_input("Nature of Business")
-    d["background"] = st.text_area("Background")
-    d["occupancy"] = st.text_input("Occupancy")
-    d["process"] = st.text_area("Process")
-    d["materials"] = st.text_area("Materials")
 
+    st.header("Business Overview")
+
+    d["business"] = st.text_input("Nature of Business", d.get("business", ""))
+    d["background"] = st.text_area("Background", d.get("background", ""))
+
+# =========================
+# ASSETS
+# =========================
 elif section == "Assets":
-    d["buildings"] = st.text_area("Buildings")
-    d["storage"] = st.text_area("Storage")
-    d["goods_open"] = st.text_input("Goods in Open")
-    d["exposure"] = st.text_area("Exposure")
 
+    st.header("Assets")
+
+    d["buildings"] = st.text_area("Buildings", d.get("buildings", ""))
+
+# =========================
+# FIRE
+# =========================
 elif section == "Fire":
+
     st.header("🔥 Fire Protection")
-    d["fire"] = st.text_area("Fire Protection Details")
 
-elif section == "Security":
-    d["security"] = st.text_area("Security Measures")
+    d["fire"] = st.text_area("Fire Protection", d.get("fire", ""))
 
-elif section == "Employees":
-    d["employees"] = st.text_area("Employees")
+    st.subheader("📸 Fire Photos")
+    d["fire_photo1"] = st.camera_input("Capture Fire Equipment", key="fire1")
+    d["fire_photo2"] = st.camera_input("Capture Fire Area", key="fire2")
 
-elif section == "Health & Safety":
-    d["health"] = st.text_area("Health & Safety")
-
-elif section == "Liability":
-    d["liability"] = st.text_area("Liability")
-
+# =========================
+# ENGINEERING
+# =========================
 elif section == "Engineering":
-    d["engineering"] = st.text_area("Engineering")
 
-elif section == "Financial Risk":
-    d["financial"] = st.text_area("Financial Risk")
+    st.header("Engineering")
 
-elif section == "Environmental":
-    d["environment"] = st.text_area("Environmental Risk")
+    d["engineering"] = st.text_area("Engineering", d.get("engineering", ""))
 
-elif section == "Cyber":
-    d["cyber"] = st.text_area("Cyber Risk")
+    st.subheader("📸 Engineering Photos")
+    d["eng_photo1"] = st.camera_input("Capture Machinery", key="eng1")
+    d["eng_photo2"] = st.camera_input("Capture Systems", key="eng2")
 
-elif section == "Loss History":
-    d["loss"] = st.text_area("Loss History")
-
-elif section == "Business Continuity":
-    d["continuity"] = st.text_area("Continuity")
-
+# =========================
+# SUBMIT PAGE
+# =========================
 elif section == "Submit":
 
     st.header("Generate Report")
 
-    if not d.get("insured"):
-        st.warning("Please fill Client Info first")
-        st.stop()
+    # =========================
+    # REQUIRED FIELDS CHECK
+    # =========================
+    required_fields = {
+        "Client Info - Insured Name": d.get("insured"),
+        "Client Info - Address": d.get("address"),
+        "Business Overview": d.get("business"),
+        "Fire Protection": d.get("fire"),
+        "Engineering": d.get("engineering"),
+    }
 
-    score = len([v for v in d.values() if v])
-    level = "LOW" if score < 10 else "MEDIUM" if score < 20 else "HIGH"
+    missing_fields = [k for k, v in required_fields.items() if not v]
 
-    st.subheader(f"Risk Score: {score}")
-    st.subheader(f"Risk Level: {level}")
+    # =========================
+    # SHOW STATUS
+    # =========================
+    if missing_fields:
+        st.warning("⚠️ Please complete all required sections before generating report")
 
-    if st.button("Generate PDF Report"):
+        with st.expander("See missing fields"):
+            for field in missing_fields:
+                st.write(f"❌ {field}")
 
+    else:
+        st.success("✅ All required fields completed")
+
+    # =========================
+    # GENERATE BUTTON
+    # =========================
+    if st.button("📄 Generate Report"):
+
+        # 🚫 BLOCK IF INCOMPLETE
+        if missing_fields:
+            st.error("Cannot generate report. Please complete all required fields.")
+            st.stop()
+
+        # =========================
+        # RISK SCORE
+        # =========================
+        score = len([v for v in d.values() if v])
+        level = "LOW" if score < 5 else "MEDIUM" if score < 10 else "HIGH"
+
+        st.subheader(f"Risk Score: {score}")
+        st.subheader(f"Risk Level: {level}")
+
+        # =========================
+        # PDF GENERATION
+        # =========================
         c = canvas.Canvas("risk_report.pdf", pagesize=letter)
         y = 750
 
-        def check(y):
-            if y < 60:
-                c.showPage()
-                return 750
-            return y
-
-        def draw(title, items, y):
-            y = check(y)
+        def draw(title, content, y):
             c.setFont("Helvetica-Bold", 14)
             c.drawString(40, y, title)
             y -= 20
 
             c.setFont("Helvetica", 10)
-
-            for k, v in items.items():
+            for k, v in content.items():
                 if v:
-                    y = check(y)
-                    c.drawString(40, y, f"{k}:")
+                    c.drawString(40, y, f"{k}: {v}")
                     y -= 15
-
-                    for line in str(v).split("\n"):
-                        y = check(y)
-                        c.drawString(60, y, line)
-                        y -= 14
 
             y -= 10
             return y
 
-        # COVER PAGE
+        # Cover Page
         c.setFont("Helvetica-Bold", 20)
-        c.drawCentredString(300, 700, "RISK ASSESSMENT REPORT")
-        c.setFont("Helvetica", 12)
-        c.drawCentredString(300, 650, f"Client: {d.get('insured')}")
-        c.drawCentredString(300, 630, f"Location: {d.get('address')}")
-
+        c.drawCentredString(300, 700, "EGIK RISK REPORT")
         c.showPage()
-        y = 750
 
-        # REPORT STRUCTURE
-        y = draw("Executive Summary", {"Summary": f"Risk Level: {level}, Score: {score}"}, y)
-        y = draw("Contacts & Control", d, y)
-        y = draw("Disclaimer & Signatures", {
-            "Disclaimer": "This report is based on site observations and provided data.",
-            "Surveyor Signature": "________________",
-            "Client Signature": "________________"
-        }, y)
-        y = draw("Risk Score", {"Score": score, "Level": level}, y)
-        y = draw("Gap Analysis", {"Findings": "Operational risks identified"}, y)
-        y = draw("Recommendations", {"Actions": "Improve controls and monitoring"}, y)
-        y = draw("Loss History", {"Loss": d.get("loss")}, y)
-
-        y = draw("Detailed Sections", d, y)
+        y = draw("Executive Summary", {"Risk Level": level, "Score": score}, y)
+        y = draw("Client Info", d, y)
+        y = draw("Fire", {"Fire": d.get("fire")}, y)
+        y = draw("Engineering", {"Engineering": d.get("engineering")}, y)
 
         c.save()
 
@@ -189,14 +237,15 @@ elif section == "Submit":
 # =========================
 # NAVIGATION BUTTONS
 # =========================
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 with col1:
-    if st.session_state.step_index > 0:
-        if st.button("⬅️ Previous"):
-            st.session_state.step_index -= 1
+    if st.session_state.step > 0:
+        st.button("⬅️ Previous", on_click=prev_step)
 
 with col2:
-    if st.session_state.step_index < len(sections) - 1:
-        if st.button("Next ➡️"):
-            st.session_state.step_index += 1
+    st.button("💾 Save for Later", on_click=save_progress)
+
+with col3:
+    if st.session_state.step < len(sections) - 1:
+        st.button("➡️ Next", on_click=next_step)
