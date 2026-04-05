@@ -97,7 +97,7 @@ st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 if section == "Welcome":
 
     # ✅ LOGO DISPLAY
-    st.image("/Users/andrewsifuna/Desktop/equity_logo.png", width=300)
+    st.image("equity_logo.png", width=300)
 
     placeholder = st.empty()
 
