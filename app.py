@@ -2052,8 +2052,10 @@ story.append(PageBreak())
         # HELPERS
         # =========================
         def section(title):
-            story.append(Paragraph(title, h2))
-            story.append(Spacer(1, 8))
+            return [
+        Paragraph(title, h2),
+        Spacer(1, 8)
+    ]
 
         def subsection(title):
             story.append(Paragraph(title, h3))
