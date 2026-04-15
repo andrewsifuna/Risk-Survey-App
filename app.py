@@ -86,20 +86,11 @@ st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 # =========================
 if section == "Welcome":
     st.image("equity_logo.png", width=300)
-
-    placeholder = st.empty()
-    for i in range(30):
-        y_anim = math.sin(i / 5) * 10
-        placeholder.markdown(
-            f"<h2 style='text-align:center; color:#008751;'>Welcome to Equity Risk Survey</h2>",
-            unsafe_allow_html=True
-        )
-        time.sleep(0.02)
-
+    st.markdown("<h2 style='text-align:center; color:#008751;'>Welcome to Equity Risk Survey</h2>", unsafe_allow_html=True)
     st.markdown("### Click Next to begin")
 
 # =========================
-# CLIENT INFO + REAL GPS
+# CLIENT INFO
 # =========================
 elif section == "Client Info":
     st.header("Client Information")
@@ -107,15 +98,12 @@ elif section == "Client Info":
     d["insured"] = st.text_input("Insured Name", d.get("insured", ""))
     d["address"] = st.text_input("Physical Address", d.get("address", ""))
 
-    # 🌍 OPTION 1 — REAL GPS (Browser)
-    st.markdown("### 📍 Get Real GPS Location")
-
+    # GPS via browser
     components.html("""
     <script>
     navigator.geolocation.getCurrentPosition(function(position) {
         const coords = position.coords.latitude + "," + position.coords.longitude;
-        const streamlitDoc = window.parent.document;
-        const inputs = streamlitDoc.querySelectorAll('input[type="text"]');
+        const inputs = window.parent.document.querySelectorAll('input[type="text"]');
         if (inputs.length > 2) {
             inputs[2].value = coords;
             inputs[2].dispatchEvent(new Event('input', { bubbles: true }));
@@ -124,162 +112,140 @@ elif section == "Client Info":
     </script>
     """, height=0)
 
-    # 🌍 OPTION 2 — IP FALLBACK BUTTON
-    def get_location():
-        try:
-            res = requests.get("https://ipinfo.io/json").json()
-            return res.get("loc"), res.get("city"), res.get("country")
-        except:
-            return "Unavailable", "-", "-"
+    if st.button("📍 Use Approx Location"):
+        res = requests.get("https://ipinfo.io/json").json()
+        d["gps"] = res.get("loc")
 
-    if st.button("📍 Use Approx Location (Fallback)"):
-        loc, city, country = get_location()
-        d["gps"] = loc
-        st.success(f"Location updated: {loc} ({city}, {country})")
-
-    # GPS INPUT
     d["gps"] = st.text_input("GPS Coordinates", d.get("gps", ""))
 
-    # 📏 AUTO DISTANCE CALCULATION (NAIROBI)
-    town_coords = (-1.286389, 36.817223)
-
+    # Distance calculation
     if d.get("gps") and "," in d["gps"]:
-        try:
-            lat, lon = map(float, d["gps"].split(","))
-            distance_km = geodesic((lat, lon), town_coords).km
-
-            st.success(f"📏 Distance from Nairobi: {distance_km:.2f} km")
-
-            d["distance"] = f"{distance_km:.2f} km"
-        except:
-            st.warning("Invalid GPS format")
+        lat, lon = map(float, d["gps"].split(","))
+        distance = geodesic((lat, lon), (-1.286389, 36.817223)).km
+        d["distance"] = f"{distance:.2f} km"
+        st.success(f"Distance from Nairobi: {distance:.2f} km")
 
     d["distance"] = st.text_input("Distance from Town", d.get("distance", ""))
-
-    d["client_photo"] = st.camera_input("Capture Front View")
 
 # =========================
 elif section == "Contacts & Control":
     st.header("Contacts & Control")
-    d["contacts"] = st.text_area("Contacts", d.get("contacts", ""))
+    d["contacts"] = st.text_area("Contacts")
 
 elif section == "Business Overview":
     st.header("Business Overview")
-    d["business"] = st.text_input("Nature of Business", d.get("business", ""))
-    d["background"] = st.text_area("Background", d.get("background", ""))
+    d["business"] = st.text_input("Nature of Business")
+    d["background"] = st.text_area("Background")
 
 # =========================
-# PROCESS + AI HAZARDS
+# ✅ MISSING SECTIONS FIX (INSERTED HERE)
 # =========================
-elif section == "Process":
-    st.header("Process")
+elif section == "Site Buildings":
+    st.header("Site Buildings")
+    d["building_age"] = st.text_input("Age, Structure & Roofing")
+    d["floors"] = st.text_input("Floors")
 
-    process = st.text_area("Describe Production Process")
+elif section == "Situation":
+    st.header("Situation")
+    d["physical_address"] = st.text_input("Physical Address")
+    d["distance_town"] = st.text_input("Distance From Town")
 
-    def detect_hazards(process):
-        p = process.lower()
-        hazards = []
+elif section == "Exposure":
+    st.header("Exposure")
+    d["exposure_internal"] = st.text_area("Internal Exposure")
+    d["exposure_external"] = st.text_area("External Exposure")
 
-        if "boiler" in p or "steam" in p:
-            hazards.append("🔥 Explosion Risk")
-        if "chemical" in p or "acid" in p:
-            hazards.append("☣️ Chemical Exposure")
-        if "machine" in p:
-            hazards.append("⚙️ Mechanical Injury")
-        if "flammable" in p:
-            hazards.append("🔥 Fire Risk")
-        if "dust" in p:
-            hazards.append("💥 Dust Explosion")
+elif section == "Storage":
+    st.header("Storage")
+    d["storage"] = st.text_area("Storage Details")
 
-        return hazards
+elif section == "Utilities":
+    st.header("Utilities")
+    d["electricity"] = st.text_area("Electricity")
+    d["water"] = st.text_area("Water")
 
-    hazards = detect_hazards(process)
+elif section == "Employees":
+    st.header("Employees")
+    d["employees"] = st.text_area("Employee Details")
 
-    st.subheader("⚠️ Auto Detected Hazards")
+elif section == "Health & Safety":
+    st.header("Health & Safety")
+    d["safety"] = st.text_area("Safety Measures")
 
-    if hazards:
-        for h in hazards:
-            st.warning(h)
-    else:
-        st.info("No major hazards detected")
+elif section == "Fire Protection":
+    st.header("Fire Protection")
+    d["fire"] = st.text_area("Fire Protection Systems")
 
-    risk_score = min(len(hazards) * 20, 100) if hazards else 10
-    st.metric("Risk Score", f"{risk_score}%")
+elif section == "Fire Services":
+    st.header("Fire Services")
+    d["fire_services"] = st.text_area("Nearby Fire Services")
 
-    d["process"] = process
-    d["hazards"] = ", ".join(hazards)
-
-# =========================
-# LOSS ESTIMATION
-# =========================
-elif section == "Risk Appraisal":
-    st.header("💰 Loss Estimation")
-
-    d["sum_insured"] = st.number_input("Sum Insured (KES)", value=1000000.0)
-
-    loss_percent = st.slider("Damage Severity (%)", 0, 100, 20)
-
-    estimated_loss = d["sum_insured"] * loss_percent / 100
-
-    st.success(f"Estimated Loss: KES {estimated_loss:,.2f}")
-
-    if loss_percent > 70:
-        st.error("⚠️ HIGH RISK")
-    elif loss_percent > 40:
-        st.warning("⚠️ MEDIUM RISK")
-    else:
-        st.success("✅ LOW RISK")
-
-    d["estimated_loss"] = estimated_loss
-
-# =========================
-# MINIMAL OTHER SECTIONS
-# =========================
 elif section == "Security":
     st.header("Security")
-    d["security"] = st.text_area("Security")
+    d["security"] = st.text_area("Security Systems")
+
+elif section == "Cash/Stocks":
+    st.header("Cash / Stocks")
+    d["cash"] = st.text_area("Cash Handling")
+
+elif section == "Computers":
+    st.header("Computers")
+    d["computers"] = st.text_area("IT Systems")
+
+elif section == "Waste Disposal":
+    st.header("Waste Disposal")
+    d["waste"] = st.text_area("Waste Management")
 
 elif section == "Perils":
     st.header("Perils")
     d["perils"] = st.text_area("Perils")
 
 # =========================
+# PROCESS
+# =========================
+elif section == "Process":
+    st.header("Process")
+    process = st.text_area("Describe Production Process")
+
+    hazards = []
+    if "boiler" in process.lower(): hazards.append("Explosion Risk")
+    if "chemical" in process.lower(): hazards.append("Chemical Risk")
+
+    for h in hazards:
+        st.warning(h)
+
+    st.metric("Risk Score", f"{min(len(hazards)*20,100)}%")
+
+# =========================
+# LOSS ESTIMATION
+# =========================
+elif section == "Risk Appraisal":
+    st.header("Loss Estimation")
+    sum_insured = st.number_input("Sum Insured", value=1000000.0)
+    loss_percent = st.slider("Damage %", 0, 100, 20)
+
+    loss = sum_insured * loss_percent / 100
+    st.success(f"Loss: {loss:,.2f}")
+
+# =========================
 # SUBMIT
 # =========================
 elif section == "Submit":
-
     st.header("Generate Report")
 
-    if st.button("📄 Generate Report"):
-
-        c = canvas.Canvas("risk_report.pdf", pagesize=letter)
+    if st.button("Generate PDF"):
+        c = canvas.Canvas("report.pdf")
         y = 750
-
-        def draw(title, value, y):
-            if y < 100:
-                c.showPage()
-                y = 750
-
-            c.setFont("Helvetica-Bold", 11)
-            c.drawString(40, y, title)
-            y -= 15
-
-            c.setFont("Helvetica", 10)
-            c.drawString(60, y, str(value))
-            y -= 25
-
-            return y
-
         for k, v in d.items():
-            y = draw(k, v, y)
-
+            c.drawString(40, y, f"{k}: {v}")
+            y -= 20
         c.save()
 
-        with open("risk_report.pdf", "rb") as f:
-            st.download_button("⬇️ Download Report", f, "risk_report.pdf")
+        with open("report.pdf", "rb") as f:
+            st.download_button("Download", f)
 
 # =========================
-# NAVIGATION
+# NAV
 # =========================
 col1, col2, col3 = st.columns(3)
 
