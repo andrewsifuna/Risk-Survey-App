@@ -491,13 +491,13 @@ elif section == "Machinery & Engineering Systems":
     # =========================
     # OPERATOR SKILL LEVEL
     # =========================
-    d["operator_skill"] = st.selectbox(
-        "Operator Skill Level",
-        ["Untrained", "Semi-skilled", "Skilled"],
-        index=["Untrained", "Semi-skilled", "Skilled"].index(
-            d.get("operator_skill", "Skilled")
-        )
+    d["process_operator_skill"] = st.selectbox(
+    "Operator Skill Level",
+    ["Low", "Moderate", "High"],
+    index=["Low", "Moderate", "High"].index(
+        d.get("process_operator_skill", "Moderate")
     )
+)
 
     # =========================
     # AUTOMATION LEVEL
