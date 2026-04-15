@@ -1,11 +1,7 @@
 import streamlit as st
-import time
-import math
 import requests
 import streamlit.components.v1 as components
 from geopy.distance import geodesic
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
 
 # =========================
 # CONFIG
@@ -13,7 +9,7 @@ from reportlab.lib.pagesizes import letter
 st.set_page_config(page_title="Equity Risk Survey System", layout="wide")
 
 # =========================
-# EQUITY STYLING
+# STYLE
 # =========================
 st.markdown("""
 <style>
@@ -28,15 +24,11 @@ h1, h2, h3 { color: #008751; }
     width: 100%;
     font-weight: bold;
 }
-.stButton>button:hover { background-color: #006F42; }
-
-.stProgress > div > div { background-color: #008751; }
-input, textarea { border-radius: 8px !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# SESSION INIT
+# SESSION
 # =========================
 if "step" not in st.session_state:
     st.session_state.step = 0
@@ -59,7 +51,7 @@ sections = [
 ]
 
 # =========================
-# NAVIGATION
+# NAV
 # =========================
 def next_step():
     if st.session_state.step < len(sections) - 1:
@@ -69,16 +61,12 @@ def prev_step():
     if st.session_state.step > 0:
         st.session_state.step -= 1
 
-def save_progress():
-    st.success("Progress saved!")
-
 section = sections[st.session_state.step]
 
 # =========================
 # HEADER
 # =========================
-progress = st.session_state.step / (len(sections) - 1)
-st.progress(progress)
+st.progress(st.session_state.step / (len(sections)-1))
 st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 
 # =========================
@@ -86,27 +74,25 @@ st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 # =========================
 if section == "Welcome":
     st.image("equity_logo.png", width=300)
-    st.markdown("<h2 style='text-align:center; color:#008751;'>Welcome to Equity Risk Survey</h2>", unsafe_allow_html=True)
     st.markdown("### Click Next to begin")
 
 # =========================
 # CLIENT INFO
 # =========================
 elif section == "Client Info":
-    st.header("Client Information")
 
-    d["insured"] = st.text_input("Insured Name", d.get("insured", ""))
-    d["address"] = st.text_input("Physical Address", d.get("address", ""))
+    d["insured"] = st.text_input("Insured Name", d.get("insured",""))
+    d["address"] = st.text_input("Address", d.get("address",""))
 
-    # GPS via browser
+    # GPS
     components.html("""
     <script>
-    navigator.geolocation.getCurrentPosition(function(position) {
-        const coords = position.coords.latitude + "," + position.coords.longitude;
-        const inputs = window.parent.document.querySelectorAll('input[type="text"]');
-        if (inputs.length > 2) {
+    navigator.geolocation.getCurrentPosition(function(pos){
+        const coords = pos.coords.latitude + "," + pos.coords.longitude;
+        const inputs = window.parent.document.querySelectorAll('input');
+        if(inputs.length>2){
             inputs[2].value = coords;
-            inputs[2].dispatchEvent(new Event('input', { bubbles: true }));
+            inputs[2].dispatchEvent(new Event('input',{bubbles:true}));
         }
     });
     </script>
@@ -116,259 +102,190 @@ elif section == "Client Info":
         res = requests.get("https://ipinfo.io/json").json()
         d["gps"] = res.get("loc")
 
-    d["gps"] = st.text_input("GPS Coordinates", d.get("gps", ""))
+    d["gps"] = st.text_input("GPS", d.get("gps",""))
 
-    # Distance calculation
     if d.get("gps") and "," in d["gps"]:
         lat, lon = map(float, d["gps"].split(","))
-        distance = geodesic((lat, lon), (-1.286389, 36.817223)).km
-        d["distance"] = f"{distance:.2f} km"
-        st.success(f"Distance from Nairobi: {distance:.2f} km")
+        dist = geodesic((lat,lon),(-1.286389,36.817223)).km
+        d["distance"] = f"{dist:.2f} km"
+        st.success(f"Distance: {dist:.2f} km")
 
-    d["distance"] = st.text_input("Distance from Town", d.get("distance", ""))
+    d["distance"] = st.text_input("Distance", d.get("distance",""))
 
-    # ✅ CAMERA BACK
-    d["client_photo"] = st.camera_input("📸 Capture Front View")
+    d["client_photo"] = st.camera_input("Capture Front View")
 
 # =========================
+# SIMPLE SECTIONS
+# =========================
 elif section == "Contacts & Control":
-    st.header("Contacts & Control")
     d["contacts"] = st.text_area("Contacts")
 
 elif section == "Business Overview":
-    st.header("Business Overview")
-    d["business"] = st.text_input("Nature of Business")
+    d["business"] = st.text_input("Business")
     d["background"] = st.text_area("Background")
 
-# =========================
-# OTHER SECTIONS
-# =========================
 elif section == "Site Buildings":
-    st.header("Site Buildings")
-    d["building_age"] = st.text_input("Age, Structure & Roofing")
-    d["floors"] = st.text_input("Floors")
-
-elif section == "Situation":
-    st.header("Situation")
-    d["physical_address"] = st.text_input("Physical Address")
-    d["distance_town"] = st.text_input("Distance From Town")
-
-elif section == "Exposure":
-    st.header("Exposure")
-    d["exposure_internal"] = st.text_area("Internal Exposure")
-    d["exposure_external"] = st.text_area("External Exposure")
-
-elif section == "Storage":
-    st.header("Storage")
-    d["storage"] = st.text_area("Storage Details")
+    d["building_age"] = st.text_input("Building Details")
 
 elif section == "Utilities":
-    st.header("Utilities")
     d["electricity"] = st.text_area("Electricity")
     d["water"] = st.text_area("Water")
 
 elif section == "Employees":
-    st.header("Employees")
-    d["employees"] = st.text_area("Employee Details")
+    d["employees"] = st.text_area("Employees")
 
 elif section == "Health & Safety":
-    st.header("Health & Safety")
-    d["safety"] = st.text_area("Safety Measures")
+    d["safety"] = st.text_area("Safety")
 
 elif section == "Fire Protection":
-    st.header("Fire Protection")
-    d["fire"] = st.text_area("Fire Protection Systems")
-
-elif section == "Fire Services":
-    st.header("Fire Services")
-    d["fire_services"] = st.text_area("Nearby Fire Services")
+    d["fire"] = st.text_area("Fire Systems")
 
 elif section == "Security":
-    st.header("Security")
-    d["security"] = st.text_area("Security Systems")
+    d["security"] = st.text_area("Security")
 
-elif section == "Cash/Stocks":
-    st.header("Cash / Stocks")
-    d["cash"] = st.text_area("Cash Handling")
+elif section == "Storage":
+    d["storage"] = st.text_area("Storage")
 
 elif section == "Computers":
-    st.header("Computers")
-    d["computers"] = st.text_area("IT Systems")
+    d["computers"] = st.text_area("IT")
 
 elif section == "Waste Disposal":
-    st.header("Waste Disposal")
-    d["waste"] = st.text_area("Waste Management")
+    d["waste"] = st.text_area("Waste")
 
 elif section == "Perils":
-    st.header("Perils")
     d["perils"] = st.text_area("Perils")
 
-# =========================
-# PROCESS
-# =========================
 elif section == "Process":
-    st.header("Process")
-    process = st.text_area("Describe Production Process")
-
-    hazards = []
-    if "boiler" in process.lower(): hazards.append("Explosion Risk")
-    if "chemical" in process.lower(): hazards.append("Chemical Risk")
-
-    for h in hazards:
-        st.warning(h)
-
-    st.metric("Risk Score", f"{min(len(hazards)*20,100)}%")
-
-# =========================
-# LOSS ESTIMATION
-# =========================
-elif section == "Risk Appraisal":
-    st.header("Loss Estimation")
-    sum_insured = st.number_input("Sum Insured", value=1000000.0)
-    loss_percent = st.slider("Damage %", 0, 100, 20)
-
-    loss = sum_insured * loss_percent / 100
-    st.success(f"Loss: {loss:,.2f}")
-
-# =========================
-# 🔥 FINAL MISSING SECTIONS (FIXED)
-# =========================
-elif section == "Hazardous Substances":
-    st.header("Hazardous Substances")
-    d["hazardous"] = st.text_area("List Hazardous Substances")
-
-elif section == "Unions":
-    st.header("Unions")
-    d["unions"] = st.text_area("Union Presence / Issues")
-
-elif section == "Losses Report":
-    st.header("Losses Report")
-    d["losses"] = st.text_area("Past Losses / Claims History")
+    d["process"] = st.text_area("Process")
 
 elif section == "Interruption Analysis":
-    st.header("Interruption Analysis")
-    d["interruption"] = st.text_area("Business Interruption Details")
+    d["interruption"] = st.text_area("Business Interruption")
 
 # =========================
-# SUBMIT
+# LOSS
+# =========================
+elif section == "Risk Appraisal":
+    d["sum_insured"] = st.number_input("Sum Insured", value=1000000.0)
+    d["estimated_loss"] = st.number_input("Estimated Loss", value=200000.0)
+
+# =========================
+# SUBMIT (FINAL PROFESSIONAL)
 # =========================
 elif section == "Submit":
 
-    st.header("Generate Report")
+    st.header("Generate Professional Report")
 
-    if st.button("Generate PDF"):
+    if st.button("📄 Generate Professional PDF"):
 
-        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak
+        from reportlab.lib import colors
         from reportlab.lib.styles import getSampleStyleSheet
-        from reportlab.lib.units import inch
 
-        doc = SimpleDocTemplate("Risk_Report.pdf")
+        doc = SimpleDocTemplate("professional_report.pdf")
         styles = getSampleStyleSheet()
 
-        elements = []
+        story = []
 
-        # =========================
-        # HEADER + FOOTER FUNCTION
-        # =========================
-        def add_header_footer(canvas, doc):
+        title = styles["Heading1"]
+        h2 = styles["Heading2"]
+        h3 = styles["Heading3"]
+        normal = styles["Normal"]
+
+        # HEADER
+        def header(canvas, doc):
             canvas.drawImage("equity_logo.png", 40, 750, width=80, height=40)
             canvas.setFont("Helvetica", 9)
             canvas.drawString(40, 20, "Equity General Insurance (Kenya) Ltd")
             canvas.drawRightString(550, 20, f"Page {doc.page}")
 
-        # =========================
-        # PAGE 1 – PHOTO & HEADING
-        # =========================
-        elements.append(Paragraph("<b>RISK SURVEY REPORT</b>", styles["Title"]))
-        elements.append(Spacer(1, 20))
+        # COVER
+        story.append(Paragraph("RISK SURVEY REPORT", title))
+        story.append(Spacer(1,20))
+        story.append(Paragraph(f"<b>Insured:</b> {d.get('insured','')}", normal))
+        story.append(Paragraph(f"<b>Address:</b> {d.get('address','')}", normal))
 
-        if d.get("client_photo") is not None:
-            with open("temp.png", "wb") as f:
+        if d.get("client_photo"):
+            with open("photo.jpg","wb") as f:
                 f.write(d["client_photo"].getbuffer())
-            elements.append(Image("temp.png", width=4*inch, height=3*inch))
-            elements.append(Spacer(1, 20))
+            story.append(Image("photo.jpg", width=400, height=250))
 
-        elements.append(Paragraph(f"<b>Insured:</b> {d.get('insured','')}", styles["Normal"]))
-        elements.append(Paragraph(f"<b>Address:</b> {d.get('address','')}", styles["Normal"]))
-        elements.append(PageBreak())
+        story.append(PageBreak())
 
-        # =========================
-        # HELPER FUNCTION
-        # =========================
-        def add_section(title, content=""):
-            elements.append(Paragraph(f"<b>{title}</b>", styles["Heading2"]))
-            elements.append(Spacer(1, 10))
-            elements.append(Paragraph(content if content else "—", styles["Normal"]))
-            elements.append(Spacer(1, 20))
+        # HELPERS
+        def sec(t):
+            story.append(Paragraph(t, h2))
+            story.append(Spacer(1,8))
 
-        # =========================
-        # YOUR EXACT STRUCTURE
-        # =========================
+        def sub(t):
+            story.append(Paragraph(t, h3))
+            story.append(Spacer(1,5))
 
-        add_section("Contacts & Control Sheet", d.get("contacts",""))
-        add_section("Disclaimer & Risk Survey Sign-Off")
-        add_section("Executive Summary")
-        add_section("Risk Improvement Recommendations (RIRs)")
-        add_section("Insurance Gap Analysis")
-        add_section("Loss Estimation (PML/EML)", str(d.get("estimated_loss","")))
-        add_section("Overall Risk Scoring Model")
+        def txt(v):
+            story.append(Paragraph(v or "-", normal))
+            story.append(Spacer(1,10))
 
-        add_section("Background Information")
-        add_section("History & Age", d.get("building_age",""))
-        add_section("GPS Location & Map", d.get("gps",""))
-        add_section("Employees", d.get("employees",""))
+        def tbl(data):
+            t = Table(data)
+            t.setStyle(TableStyle([
+                ("GRID",(0,0),(-1,-1),1,colors.black),
+                ("BACKGROUND",(0,0),(-1,0),colors.grey),
+                ("TEXTCOLOR",(0,0),(-1,0),colors.white)
+            ]))
+            story.append(t)
+            story.append(Spacer(1,10))
 
-        add_section("Construction & Structural Integrity")
-        add_section("Occupancy/Processes & Operational Controls", d.get("process",""))
-        add_section("Electrical Systems Safety", d.get("electricity",""))
-        add_section("Human Factors")
-        add_section("Fire, Explosion, and Protection Systems", d.get("fire",""))
-        add_section("Security Systems", d.get("security",""))
-        add_section("Utilities & Critical Services", d.get("water",""))
-        add_section("Machinery & Engineering Systems")
-        add_section("Occupational Safety & Health (OSH)", d.get("safety",""))
-        add_section("Storage & Material Handling", d.get("storage",""))
-        add_section("Natural Catastrophes (NatCat)", d.get("perils",""))
-        add_section("Cyber & Information Security", d.get("computers",""))
-        add_section("Supply Chain & Logistics")
-        add_section("Environmental Management", d.get("waste",""))
-        add_section("Business Continuity (BI)", d.get("interruption",""))
-        add_section("Management Systems & Risk Governance")
+        # STRUCTURED REPORT
+        sec("1.0 Contacts & Control Sheet"); txt(d.get("contacts"))
+        sec("2.0 Disclaimer"); txt("Survey-based assessment.")
+        sec("3.0 Executive Summary"); txt("Overall moderate risk.")
 
-        # =========================
-        # BUILD PDF
-        # =========================
-        doc.build(elements, onFirstPage=add_header_footer, onLaterPages=add_header_footer)
+        sec("4.0 Risk Improvements"); txt("Improve fire + safety")
 
-        # =========================
-        # DOWNLOAD
-        # =========================
-        with open("Risk_Report.pdf", "rb") as f:
-            st.download_button(
-                "⬇️ Download Professional Report",
-                f,
-                "Risk_Report.pdf",
-                "application/pdf"
-            )
+        sec("5.0 Insurance Gap")
+        tbl([["Area","Status"],["Fire","OK"],["BI","Review"]])
 
-# =========================
-# 🚨 FALLBACK (NO BLANK SCREENS EVER)
-# =========================
-else:
-    st.warning(f"⚠️ Section '{section}' not yet implemented")
+        sec("6.0 Loss Estimation")
+        tbl([["Metric","Value"],["Sum",str(d.get("sum_insured"))],["Loss",str(d.get("estimated_loss"))]])
+
+        sec("7.0 Risk Score")
+        tbl([["Factor","Score"],["Fire","Medium"],["Security","Low"]])
+
+        sec("8.0 Background")
+        sub("8.1 Building"); txt(d.get("building_age"))
+        sub("8.2 GPS"); txt(d.get("gps"))
+        sub("8.3 Employees"); txt(d.get("employees"))
+
+        sec("9.0 Construction"); txt(d.get("building_age"))
+        sec("10.0 Process"); txt(d.get("process"))
+        sec("11.0 Electrical"); txt(d.get("electricity"))
+        sec("12.0 Human"); txt(d.get("employees"))
+        sec("13.0 Fire"); txt(d.get("fire"))
+        sec("14.0 Security"); txt(d.get("security"))
+        sec("15.0 Utilities"); txt(d.get("water"))
+        sec("16.0 Machinery"); txt(d.get("computers"))
+        sec("17.0 OSH"); txt(d.get("safety"))
+        sec("18.0 Storage"); txt(d.get("storage"))
+        sec("19.0 NatCat"); txt(d.get("perils"))
+        sec("20.0 Cyber"); txt("Basic controls")
+        sec("21.0 Supply Chain"); txt("Moderate")
+        sec("22.0 Environmental"); txt(d.get("waste"))
+        sec("23.0 BI"); txt(d.get("interruption"))
+        sec("24.0 Governance"); txt("Structured")
+
+        doc.build(story, onFirstPage=header, onLaterPages=header)
+
+        with open("professional_report.pdf","rb") as f:
+            st.download_button("⬇️ Download Report", f, "professional_report.pdf")
 
 # =========================
-# NAV
+# NAV BUTTONS
 # =========================
-col1, col2, col3 = st.columns(3)
+c1,c2,c3 = st.columns(3)
 
-with col1:
-    if st.session_state.step > 0:
+with c1:
+    if st.session_state.step>0:
         st.button("⬅️ Previous", on_click=prev_step)
 
-with col2:
-    st.button("💾 Save", on_click=save_progress)
-
-with col3:
-    if st.session_state.step < len(sections) - 1:
+with c3:
+    if st.session_state.step < len(sections)-1:
         st.button("Next ➡️", on_click=next_step)
