@@ -81,31 +81,47 @@ if section == "Welcome":
     col1, col2, col3 = st.columns([1,2,1])
 
     with col2:
-
         st.image("equity_logo.png", width=200)
 
+        # Animated title
         placeholder = st.empty()
-
-        for i in range(20):  # reduced for smoother UX
+        for i in range(20):
             y_anim = math.sin(i / 3) * 8
-
             placeholder.markdown(
                 f"""
                 <h2 style='text-align:center;
                            color:#008751;
                            transform: translateY({y_anim}px);'>
-                Welcome to Equity Risk Survey
+                    Welcome to Equity Risk Survey
                 </h2>
                 """,
                 unsafe_allow_html=True
             )
-
             time.sleep(0.02)
 
         st.markdown(
-            "<p style='text-align:center;'>Click Next to begin</p>",
+            "<p style='text-align:center;'>Select an option to continue</p>",
             unsafe_allow_html=True
         )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # =========================
+        # BUTTONS (CENTERED)
+        # =========================
+        b1, b2, b3 = st.columns(3)
+
+        with b1:
+            if st.button("▶️ Begin Survey"):
+                next_step()
+
+        with b2:
+            if st.button("📄 View Reports"):
+                st.info("Report viewer coming next...")
+
+        with b3:
+            if st.button("🔄 Resume Survey"):
+                st.info("Resume functionality coming next...")
 
 # =========================
 # CLIENT INFO
