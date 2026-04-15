@@ -184,6 +184,18 @@ elif section == "Situation":
     d["distance_town"] = st.text_input(
         "Distance From Town", d.get("distance_town", "")
     )
+elif section == "Exposure":
+    st.header("Exposure")
+
+    d["exposure_internal"] = st.text_area(
+        "Internal Exposure (e.g. fire load, machinery, processes)",
+        d.get("exposure_internal", "")
+    )
+
+    d["exposure_external"] = st.text_area(
+        "External Exposure (e.g. сосед buildings, roads, hazards)",
+        d.get("exposure_external", "")
+    )
 
 elif section == "Utilities":
     d["electricity"] = st.text_area("Electricity")
