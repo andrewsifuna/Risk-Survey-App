@@ -344,6 +344,11 @@ elif section == "Submit":
 
         with open("professional_report.pdf", "rb") as f:
             st.download_button("⬇️ Download Professional Report", f, "professional_report.pdf")
+    # =========================
+# 🚨 FALLBACK (NO BLANK SCREENS EVER)
+# =========================
+else:
+    st.warning(f"⚠️ Section '{section}' not yet implemented")
 
 # =========================
 # NAV BUTTONS
