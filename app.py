@@ -1979,74 +1979,71 @@ elif section == "Submit":
             canvas.drawString(40, 20, "Equity General Insurance (Kenya) Ltd")
             canvas.drawRightString(550, 20, f"Page {doc.page}")
 
-        # =========================
+                # =========================
         # COVER PAGE
         # =========================
-        # =========================
-# COVER PAGE (PROFESSIONAL)
-# =========================
 
-from reportlab.lib.units import inch
-from reportlab.platypus import Spacer, Table, TableStyle
-from reportlab.lib import colors
+        from reportlab.lib.units import inch
+        from reportlab.platypus import Spacer, Table, TableStyle
+        from reportlab.lib import colors
 
-# Logo + Company Header
-header_table = Table([
-    [
-        Image("equity_logo.png", width=120, height=60),
-        Paragraph("<b>Equity General Insurance (Kenya) Ltd</b>", styles["Title"])
-    ]
-], colWidths=[150, 350])
+        # Logo + Company Header
+        header_table = Table([
+            [
+                Image("equity_logo.png", width=120, height=60),
+                Paragraph("<b>Equity General Insurance (Kenya) Ltd</b>", styles["Title"])
+            ]
+        ], colWidths=[150, 350])
 
-header_table.setStyle(TableStyle([
-    ("VALIGN", (0,0), (-1,-1), "MIDDLE")
-]))
+        header_table.setStyle(TableStyle([
+            ("VALIGN", (0,0), (-1,-1), "MIDDLE")
+        ]))
 
-story.append(header_table)
-story.append(Spacer(1, 40))
+        story.append(header_table)
+        story.append(Spacer(1, 40))
 
-# Main Title (Centered)
-story.append(Paragraph(
-    "<para align='center'><b>RISK SURVEY REPORT</b></para>",
-    styles["Heading1"]
-))
-story.append(Spacer(1, 30))
+        # Main Title (Centered)
+        story.append(Paragraph(
+            "<para align='center'><b>RISK SURVEY REPORT</b></para>",
+            styles["Heading1"]
+        ))
+        story.append(Spacer(1, 30))
 
-# Client Details Box
-details = [
-    ["Insured:", d.get("insured","")],
-    ["Address:", d.get("address","")],
-    ["Survey Date:", time.strftime("%d %B %Y")]
-]
+        # Client Details Box
+        details = [
+            ["Insured:", d.get("insured","")],
+            ["Address:", d.get("address","")],
+            ["Survey Date:", time.strftime("%d %B %Y")]
+        ]
 
-details_table = Table(details, colWidths=[120, 350])
+        details_table = Table(details, colWidths=[120, 350])
 
-details_table.setStyle(TableStyle([
-    ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
-    ("BACKGROUND", (0,0), (0,-1), colors.lightgrey),
-]))
+        details_table.setStyle(TableStyle([
+            ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
+            ("BACKGROUND", (0,0), (0,-1), colors.lightgrey),
+        ]))
 
-story.append(details_table)
-story.append(Spacer(1, 30))
+        story.append(details_table)
+        story.append(Spacer(1, 30))
 
-# Client Photo (Centered)
-if d.get("client_photo"):
-    with open("photo.jpg", "wb") as f:
-        f.write(d["client_photo"].getbuffer())
+        # Client Photo (Centered)
+        if d.get("client_photo"):
+            with open("photo.jpg", "wb") as f:
+                f.write(d["client_photo"].getbuffer())
 
-    img = Image("photo.jpg", width=400, height=250)
-    img.hAlign = 'CENTER'
-    story.append(img)
+            img = Image("photo.jpg", width=400, height=250)
+            img.hAlign = 'CENTER'
+            story.append(img)
 
-story.append(Spacer(1, 40))
+        story.append(Spacer(1, 40))
 
-# Footer Info
-story.append(Paragraph(
-    "<para align='center'>Confidential Risk Assessment Report</para>",
-    styles["Normal"]
-))
+        # Footer Info
+        story.append(Paragraph(
+            "<para align='center'>Confidential Risk Assessment Report</para>",
+            styles["Normal"]
+        ))
 
-story.append(PageBreak())
+        story.append(PageBreak())
 
         # =========================
         # HELPERS
