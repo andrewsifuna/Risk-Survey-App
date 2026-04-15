@@ -253,23 +253,103 @@ elif section == "Interruption Analysis":
 # SUBMIT
 # =========================
 elif section == "Submit":
+
     st.header("Generate Report")
 
     if st.button("Generate PDF"):
-        c = canvas.Canvas("report.pdf")
-        y = 750
-        for k, v in d.items():
-            c.drawString(40, y, f"{k}: {v}")
-            y -= 20
-        c.save()
 
-        with open("report.pdf", "rb") as f:
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak
+        from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.lib.units import inch
+
+        doc = SimpleDocTemplate("Risk_Report.pdf")
+        styles = getSampleStyleSheet()
+
+        elements = []
+
+        # =========================
+        # HEADER + FOOTER FUNCTION
+        # =========================
+        def add_header_footer(canvas, doc):
+            canvas.drawImage("equity_logo.png", 40, 750, width=80, height=40)
+            canvas.setFont("Helvetica", 9)
+            canvas.drawString(40, 20, "Equity General Insurance (Kenya) Ltd")
+            canvas.drawRightString(550, 20, f"Page {doc.page}")
+
+        # =========================
+        # PAGE 1 – PHOTO & HEADING
+        # =========================
+        elements.append(Paragraph("<b>RISK SURVEY REPORT</b>", styles["Title"]))
+        elements.append(Spacer(1, 20))
+
+        if d.get("client_photo") is not None:
+            with open("temp.png", "wb") as f:
+                f.write(d["client_photo"].getbuffer())
+            elements.append(Image("temp.png", width=4*inch, height=3*inch))
+            elements.append(Spacer(1, 20))
+
+        elements.append(Paragraph(f"<b>Insured:</b> {d.get('insured','')}", styles["Normal"]))
+        elements.append(Paragraph(f"<b>Address:</b> {d.get('address','')}", styles["Normal"]))
+        elements.append(PageBreak())
+
+        # =========================
+        # HELPER FUNCTION
+        # =========================
+        def add_section(title, content=""):
+            elements.append(Paragraph(f"<b>{title}</b>", styles["Heading2"]))
+            elements.append(Spacer(1, 10))
+            elements.append(Paragraph(content if content else "—", styles["Normal"]))
+            elements.append(Spacer(1, 20))
+
+        # =========================
+        # YOUR EXACT STRUCTURE
+        # =========================
+
+        add_section("Contacts & Control Sheet", d.get("contacts",""))
+        add_section("Disclaimer & Risk Survey Sign-Off")
+        add_section("Executive Summary")
+        add_section("Risk Improvement Recommendations (RIRs)")
+        add_section("Insurance Gap Analysis")
+        add_section("Loss Estimation (PML/EML)", str(d.get("estimated_loss","")))
+        add_section("Overall Risk Scoring Model")
+
+        add_section("Background Information")
+        add_section("History & Age", d.get("building_age",""))
+        add_section("GPS Location & Map", d.get("gps",""))
+        add_section("Employees", d.get("employees",""))
+
+        add_section("Construction & Structural Integrity")
+        add_section("Occupancy/Processes & Operational Controls", d.get("process",""))
+        add_section("Electrical Systems Safety", d.get("electricity",""))
+        add_section("Human Factors")
+        add_section("Fire, Explosion, and Protection Systems", d.get("fire",""))
+        add_section("Security Systems", d.get("security",""))
+        add_section("Utilities & Critical Services", d.get("water",""))
+        add_section("Machinery & Engineering Systems")
+        add_section("Occupational Safety & Health (OSH)", d.get("safety",""))
+        add_section("Storage & Material Handling", d.get("storage",""))
+        add_section("Natural Catastrophes (NatCat)", d.get("perils",""))
+        add_section("Cyber & Information Security", d.get("computers",""))
+        add_section("Supply Chain & Logistics")
+        add_section("Environmental Management", d.get("waste",""))
+        add_section("Business Continuity (BI)", d.get("interruption",""))
+        add_section("Management Systems & Risk Governance")
+
+        # =========================
+        # BUILD PDF
+        # =========================
+        doc.build(elements, onFirstPage=add_header_footer, onLaterPages=add_header_footer)
+
+        # =========================
+        # DOWNLOAD
+        # =========================
+        with open("Risk_Report.pdf", "rb") as f:
             st.download_button(
-        label="⬇️ Download Report",
-        data=f,
-        file_name="Risk_Report.pdf",
-        mime="application/pdf"
-    )
+                "⬇️ Download Professional Report",
+                f,
+                "Risk_Report.pdf",
+                "application/pdf"
+            )
 
 # =========================
 # 🚨 FALLBACK (NO BLANK SCREENS EVER)
