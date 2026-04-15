@@ -260,7 +260,12 @@ elif section == "Submit":
         c.save()
 
         with open("report.pdf", "rb") as f:
-            st.download_button("Download", f)
+            st.download_button(
+        label="⬇️ Download Report",
+        data=f,
+        file_name="Risk_Report.pdf",
+        mime="application/pdf"
+    )
 
 # =========================
 # 🚨 FALLBACK (NO BLANK SCREENS EVER)
