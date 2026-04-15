@@ -209,6 +209,24 @@ elif section == "Health & Safety":
 
 elif section == "Fire Protection":
     d["fire"] = st.text_area("Fire Systems")
+    
+elif section == "Fire Services":
+    st.header("Fire Services")
+
+    d["fire_services"] = st.text_area(
+        "Nearest Fire Brigade / Response Details",
+        d.get("fire_services", "")
+    )
+
+    d["fire_distance"] = st.text_input(
+        "Distance to Fire Station (km)",
+        d.get("fire_distance", "")
+    )
+
+    d["fire_response_time"] = st.text_input(
+        "Estimated Response Time (minutes)",
+        d.get("fire_response_time", "")
+    )
 
 elif section == "Security":
     d["security"] = st.text_area("Security")
