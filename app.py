@@ -1526,12 +1526,12 @@ elif section == "Process":
     )
 
     d["maintenance_program"] = st.selectbox(
-        "Maintenance Program",
-        ["Regular", "Occasional", "None"],
-        index=["Regular", "Occasional", "None"].index(
-            d.get("maintenance_program", "Occasional")
-        )
+    "Maintenance Program",
+    ["None", "Reactive", "Preventive", "Predictive"],
+    index=["None", "Reactive", "Preventive", "Predictive"].index(
+        d.get("maintenance_program", "Preventive")
     )
+)
 
     # =========================
     # PROCESS HAZARDS
