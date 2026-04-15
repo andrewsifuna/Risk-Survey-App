@@ -72,7 +72,7 @@ st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 # =========================
 # WELCOME
 # =========================
-iif section == "Welcome":
+if section == "Welcome":
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
