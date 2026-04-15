@@ -230,6 +230,24 @@ elif section == "Fire Services":
 
 elif section == "Security":
     d["security"] = st.text_area("Security")
+    
+elif section == "Cash/Stocks":
+    st.header("Cash / Stocks")
+
+    d["cash"] = st.text_area(
+        "Cash Handling (limits, safes, controls)",
+        d.get("cash", "")
+    )
+
+    d["stock_value"] = st.text_input(
+        "Estimated Stock Value (KES)",
+        d.get("stock_value", "")
+    )
+
+    d["stock_type"] = st.text_area(
+        "Type of Stock (e.g. electronics, food, chemicals)",
+        d.get("stock_type", "")
+    )
 
 elif section == "Storage":
     d["storage"] = st.text_area("Storage")
