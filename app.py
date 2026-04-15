@@ -118,6 +118,7 @@ elif section == "Client Info":
 
     d["gps"] = st.text_input("GPS Coordinates", d.get("gps", ""))
 
+    # Distance calculation
     if d.get("gps") and "," in d["gps"]:
         lat, lon = map(float, d["gps"].split(","))
         distance = geodesic((lat, lon), (-1.286389, 36.817223)).km
@@ -125,6 +126,9 @@ elif section == "Client Info":
         st.success(f"Distance from Nairobi: {distance:.2f} km")
 
     d["distance"] = st.text_input("Distance from Town", d.get("distance", ""))
+
+    # ✅ CAMERA BACK
+    d["client_photo"] = st.camera_input("📸 Capture Front View")
 
 # =========================
 elif section == "Contacts & Control":
