@@ -202,13 +202,13 @@ elif section == "Utilities":
     # =========================
     # ELECTRICITY
     # =========================
-    d["power_source"] = st.selectbox(
-        "Main Power Source",
-        ["Grid (KPLC)", "Generator", "Solar", "Mixed"],
-        index=["Grid (KPLC)", "Generator", "Solar", "Mixed"].index(
-            d.get("power_source", "Grid (KPLC)")
-        )
+    d["machinery_power_source"] = st.selectbox(
+    "Main Power Source",
+    ["Grid", "Generator", "Solar", "Mixed"],
+    index=["Grid", "Generator", "Solar", "Mixed"].index(
+        d.get("machinery_power_source", "Grid")
     )
+)
 
     d["power_reliability"] = st.selectbox(
         "Power Reliability",
