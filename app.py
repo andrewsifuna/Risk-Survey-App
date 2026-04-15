@@ -1959,162 +1959,176 @@ elif section == "Submit":
         from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak
         from reportlab.lib import colors
         from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.lib.pagesizes import A4
 
-        doc = SimpleDocTemplate("professional_report.pdf")
+        doc = SimpleDocTemplate("professional_report.pdf", pagesize=A4)
         styles = getSampleStyleSheet()
 
         story = []
 
-        title = styles["Heading1"]
+        title = styles["Title"]
         h2 = styles["Heading2"]
-        h3 = styles["Heading3"]
         normal = styles["Normal"]
 
         # =========================
         # HEADER / FOOTER
         # =========================
         def header(canvas, doc):
-            canvas.drawImage("equity_logo.png", 40, 750, width=80, height=40)
+            canvas.drawImage("equity_logo.png", 40, 770, width=80, height=40)
             canvas.setFont("Helvetica", 9)
             canvas.drawString(40, 20, "Equity General Insurance (Kenya) Ltd")
             canvas.drawRightString(550, 20, f"Page {doc.page}")
 
         # =========================
-        # COVER PAGE
+        # COVER PAGE (FIXED)
         # =========================
-        story.append(Paragraph("RISK SURVEY REPORT", title))
-        story.append(Spacer(1, 20))
+        story.append(Spacer(1, 80))
+
+        story.append(Paragraph("<b>RISK SURVEY REPORT</b>", title))
+        story.append(Spacer(1, 30))
 
         story.append(Paragraph(f"<b>Insured:</b> {d.get('insured','')}", normal))
         story.append(Paragraph(f"<b>Address:</b> {d.get('address','')}", normal))
-        story.append(Spacer(1, 20))
 
+        story.append(Spacer(1, 30))
+
+        # CLIENT PHOTO
         if d.get("client_photo"):
             with open("photo.jpg", "wb") as f:
                 f.write(d["client_photo"].getbuffer())
             story.append(Image("photo.jpg", width=400, height=250))
+            story.append(Spacer(1, 20))
 
         story.append(PageBreak())
 
         # =========================
-        # HELPERS
+        # HELPER FUNCTION
         # =========================
-        def section(title):
+        def add_table(title, data):
             story.append(Paragraph(title, h2))
-            story.append(Spacer(1, 8))
-
-        def subsection(title):
-            story.append(Paragraph(title, h3))
-            story.append(Spacer(1, 5))
-
-        def text_block(text):
-            story.append(Paragraph(text or "-", normal))
             story.append(Spacer(1, 10))
 
-        def table(data):
-            t = Table(data)
+            table_data = [["Item", "Details"]]
+            for k, v in data.items():
+                table_data.append([k, str(v)])
+
+            t = Table(table_data)
             t.setStyle(TableStyle([
                 ("GRID", (0,0), (-1,-1), 1, colors.black),
                 ("BACKGROUND", (0,0), (-1,0), colors.grey),
                 ("TEXTCOLOR",(0,0),(-1,0),colors.white)
             ]))
+
             story.append(t)
-            story.append(Spacer(1, 15))
+            story.append(Spacer(1, 20))
 
         # =========================
-        # PROFESSIONAL STRUCTURE
+        # FULL DATA CAPTURE (FIXED)
         # =========================
-        section("1.0 Contacts & Control Sheet")
-        text_block(d.get("contacts"))
 
-        section("2.0 Disclaimer & Risk Survey Sign-Off")
-        text_block("This report reflects observed conditions at time of survey.")
+        add_table("Client Information", {
+            "Insured": d.get("insured"),
+            "Address": d.get("address"),
+            "GPS": d.get("gps"),
+            "Distance": d.get("distance")
+        })
 
-        section("3.0 Executive Summary")
-        text_block("Overall risk profile based on survey inputs.")
+        add_table("Employees", {
+            "Number": d.get("num_employees"),
+            "Type": d.get("employee_type"),
+            "Shift": d.get("shift_work"),
+            "Training": d.get("training"),
+            "Turnover": d.get("turnover"),
+            "Fidelity Risk": d.get("fidelity_risk")
+        })
 
-        section("4.0 Risk Improvement Recommendations (RIRs)")
-        text_block("• Improve fire systems\n• Enhance safety controls")
+        add_table("Machinery & Engineering", {
+            "Types": d.get("machinery_types"),
+            "Value": d.get("machinery_value"),
+            "Age": d.get("machinery_age"),
+            "Condition": d.get("machinery_condition"),
+            "Maintenance": d.get("maintenance_program"),
+            "Breakdown History": d.get("breakdown_history"),
+            "Critical Machines": d.get("critical_machines"),
+            "Redundancy": d.get("redundancy")
+        })
 
-        section("5.0 Insurance Gap Analysis")
-        table([
-            ["Area", "Status"],
-            ["Fire Cover", "Adequate"],
-            ["Business Interruption", "Review Needed"]
-        ])
+        add_table("Health & Safety", {
+            "Policy": d.get("hs_policy"),
+            "Compliance": d.get("regulatory_compliance"),
+            "Training": d.get("safety_training"),
+            "PPE": d.get("ppe_provided"),
+            "Incidents": d.get("incident_history"),
+            "Housekeeping": d.get("housekeeping")
+        })
 
-        section("6.0 Loss Estimation (PML/EML)")
-        table([
-            ["Metric", "Value"],
-            ["Sum Insured", str(d.get("sum_insured",""))],
-            ["Estimated Loss", str(d.get("estimated_loss",""))]
-        ])
+        add_table("Fire Protection", {
+            "Detection": d.get("fire_detection"),
+            "Alarm": d.get("alarm_monitoring"),
+            "Extinguishers": d.get("extinguishers"),
+            "Sprinklers": d.get("sprinklers"),
+            "Hydrants": d.get("hydrants"),
+            "Fire Team": d.get("fire_team")
+        })
 
-        section("7.0 Overall Risk Scoring Model")
-        table([
-            ["Factor", "Score"],
-            ["Fire Risk", "Medium"],
-            ["Security", "Low"]
-        ])
+        add_table("Security", {
+            "Perimeter": d.get("perimeter"),
+            "Access Control": d.get("access_control"),
+            "CCTV": d.get("cctv"),
+            "Alarm": d.get("alarm_system"),
+            "Guards": d.get("security_guards"),
+            "Panic Button": d.get("panic_button"),
+            "Incidents": d.get("theft_history")
+        })
 
-        section("8.0 Background Information")
+        add_table("Utilities", {
+            "Power Source": d.get("power_source"),
+            "Reliability": d.get("power_reliability"),
+            "Water Source": d.get("water_source"),
+            "Fire Water": d.get("fire_water_availability")
+        })
 
-        subsection("8.1 History & Age")
-        text_block(d.get("building_age"))
+        add_table("Storage", {
+            "Goods": d.get("goods_type"),
+            "Method": d.get("storage_method"),
+            "Combustibility": d.get("combustibility"),
+            "Security": d.get("storage_security")
+        })
 
-        subsection("8.2 GPS Location & Map")
-        text_block(d.get("gps"))
+        add_table("IT Systems", {
+            "Dependency": d.get("it_usage"),
+            "Backup": d.get("data_backup"),
+            "Firewall": d.get("firewall"),
+            "Incidents": d.get("cyber_incidents")
+        })
 
-        subsection("8.3 Employees")
-        text_block(d.get("employees"))
+        add_table("Waste Disposal", {
+            "Type": d.get("waste_type"),
+            "Method": d.get("disposal_method"),
+            "Compliance": d.get("waste_compliance")
+        })
 
-        section("9.0 Construction & Structural Integrity")
-        text_block(d.get("building_age"))
+        add_table("Perils", {
+            "Fire": d.get("fire_peril"),
+            "Flood": d.get("flood_peril"),
+            "Theft": d.get("theft_peril"),
+            "Overall": d.get("overall_peril")
+        })
 
-        section("10.0 Occupancy/Processes & Operational Controls")
-        text_block(d.get("process"))
+        add_table("Business Interruption", {
+            "Turnover": d.get("annual_turnover"),
+            "Gross Profit": d.get("gross_profit"),
+            "Indemnity": d.get("indemnity_period"),
+            "Downtime": d.get("estimated_downtime")
+        })
 
-        section("11.0 Electrical Systems Safety")
-        text_block(d.get("electricity"))
-
-        section("12.0 Human Factors")
-        text_block(d.get("employees"))
-
-        section("13.0 Fire, Explosion, and Protection Systems")
-        text_block(d.get("fire"))
-
-        section("14.0 Security Systems")
-        text_block(d.get("security"))
-
-        section("15.0 Utilities & Critical Services")
-        text_block(d.get("water"))
-
-        section("16.0 Machinery & Engineering Systems")
-        text_block(d.get("computers"))
-
-        section("17.0 Occupational Safety & Health (OSH)")
-        text_block(d.get("safety"))
-
-        section("18.0 Storage & Material Handling")
-        text_block(d.get("storage"))
-
-        section("19.0 Natural Catastrophes (NatCat)")
-        text_block(d.get("perils"))
-
-        section("20.0 Cyber & Information Security")
-        text_block("Basic controls observed")
-
-        section("21.0 Supply Chain & Logistics")
-        text_block("Moderate dependency")
-
-        section("22.0 Environmental Management")
-        text_block(d.get("waste"))
-
-        section("23.0 Business Continuity (BI)")
-        text_block(d.get("interruption"))
-
-        section("24.0 Management Systems & Risk Governance")
-        text_block("Management controls in place")
+        add_table("Risk Appraisal", {
+            "Total Value": d.get("building_value"),
+            "Sum Insured": d.get("sum_insured"),
+            "Estimated Loss": d.get("estimated_loss"),
+            "PML": d.get("pml"),
+            "MPL": d.get("mpl")
+        })
 
         # =========================
         # BUILD
@@ -2122,7 +2136,7 @@ elif section == "Submit":
         doc.build(story, onFirstPage=header, onLaterPages=header)
 
         with open("professional_report.pdf", "rb") as f:
-            st.download_button("⬇️ Download Professional Report", f, "professional_report.pdf")
+            st.download_button("⬇️ Download Report", f, "professional_report.pdf")
     # =========================
 # 🚨 FALLBACK (NO BLANK SCREENS EVER)
 # =========================
