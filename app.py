@@ -501,7 +501,7 @@ elif section == "Machinery & Engineering Systems":
     "Operator Skill Level",
     options,
     index=safe_index(options, d.get("process_operator_skill", "Moderate"))
-    )
+)
 
     # =========================
     # AUTOMATION LEVEL
