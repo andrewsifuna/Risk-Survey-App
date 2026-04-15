@@ -304,6 +304,36 @@ elif section == "Unions":
         "Labor-related risks (e.g. unrest, turnover, disputes)",
         d.get("labor_risk", "")
     )
+elif section == "Losses Report":
+    st.header("Loss History / Claims Experience")
+
+    d["loss_history"] = st.text_area(
+        "Past Losses (Fire, Theft, Liability, etc.)",
+        d.get("loss_history", "")
+    )
+
+    d["loss_frequency"] = st.selectbox(
+        "Frequency of Losses",
+        ["None", "Rare", "Occasional", "Frequent"],
+        index=["None","Rare","Occasional","Frequent"].index(
+            d.get("loss_frequency","None")
+        )
+    )
+
+    d["largest_loss"] = st.text_input(
+        "Largest Loss Recorded (KES)",
+        d.get("largest_loss", "")
+    )
+
+    d["loss_cause"] = st.text_area(
+        "Main Causes of Losses",
+        d.get("loss_cause", "")
+    )
+
+    d["preventive_measures"] = st.text_area(
+        "Measures Taken to Prevent Recurrence",
+        d.get("preventive_measures", "")
+    )
 
 elif section == "Interruption Analysis":
     d["interruption"] = st.text_area("Business Interruption")
