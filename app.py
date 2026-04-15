@@ -191,91 +191,159 @@ elif section == "Submit":
         h3 = styles["Heading3"]
         normal = styles["Normal"]
 
-        # HEADER
+        # =========================
+        # HEADER / FOOTER
+        # =========================
         def header(canvas, doc):
             canvas.drawImage("equity_logo.png", 40, 750, width=80, height=40)
             canvas.setFont("Helvetica", 9)
             canvas.drawString(40, 20, "Equity General Insurance (Kenya) Ltd")
             canvas.drawRightString(550, 20, f"Page {doc.page}")
 
-        # COVER
+        # =========================
+        # COVER PAGE
+        # =========================
         story.append(Paragraph("RISK SURVEY REPORT", title))
-        story.append(Spacer(1,20))
+        story.append(Spacer(1, 20))
+
         story.append(Paragraph(f"<b>Insured:</b> {d.get('insured','')}", normal))
         story.append(Paragraph(f"<b>Address:</b> {d.get('address','')}", normal))
+        story.append(Spacer(1, 20))
 
         if d.get("client_photo"):
-            with open("photo.jpg","wb") as f:
+            with open("photo.jpg", "wb") as f:
                 f.write(d["client_photo"].getbuffer())
             story.append(Image("photo.jpg", width=400, height=250))
 
         story.append(PageBreak())
 
+        # =========================
         # HELPERS
-        def sec(t):
-            story.append(Paragraph(t, h2))
-            story.append(Spacer(1,8))
+        # =========================
+        def section(title):
+            story.append(Paragraph(title, h2))
+            story.append(Spacer(1, 8))
 
-        def sub(t):
-            story.append(Paragraph(t, h3))
-            story.append(Spacer(1,5))
+        def subsection(title):
+            story.append(Paragraph(title, h3))
+            story.append(Spacer(1, 5))
 
-        def txt(v):
-            story.append(Paragraph(v or "-", normal))
-            story.append(Spacer(1,10))
+        def text_block(text):
+            story.append(Paragraph(text or "-", normal))
+            story.append(Spacer(1, 10))
 
-        def tbl(data):
+        def table(data):
             t = Table(data)
             t.setStyle(TableStyle([
-                ("GRID",(0,0),(-1,-1),1,colors.black),
-                ("BACKGROUND",(0,0),(-1,0),colors.grey),
+                ("GRID", (0,0), (-1,-1), 1, colors.black),
+                ("BACKGROUND", (0,0), (-1,0), colors.grey),
                 ("TEXTCOLOR",(0,0),(-1,0),colors.white)
             ]))
             story.append(t)
-            story.append(Spacer(1,10))
+            story.append(Spacer(1, 15))
 
-        # STRUCTURED REPORT
-        sec("1.0 Contacts & Control Sheet"); txt(d.get("contacts"))
-        sec("2.0 Disclaimer"); txt("Survey-based assessment.")
-        sec("3.0 Executive Summary"); txt("Overall moderate risk.")
+        # =========================
+        # PROFESSIONAL STRUCTURE
+        # =========================
+        section("1.0 Contacts & Control Sheet")
+        text_block(d.get("contacts"))
 
-        sec("4.0 Risk Improvements"); txt("Improve fire + safety")
+        section("2.0 Disclaimer & Risk Survey Sign-Off")
+        text_block("This report reflects observed conditions at time of survey.")
 
-        sec("5.0 Insurance Gap")
-        tbl([["Area","Status"],["Fire","OK"],["BI","Review"]])
+        section("3.0 Executive Summary")
+        text_block("Overall risk profile based on survey inputs.")
 
-        sec("6.0 Loss Estimation")
-        tbl([["Metric","Value"],["Sum",str(d.get("sum_insured"))],["Loss",str(d.get("estimated_loss"))]])
+        section("4.0 Risk Improvement Recommendations (RIRs)")
+        text_block("• Improve fire systems\n• Enhance safety controls")
 
-        sec("7.0 Risk Score")
-        tbl([["Factor","Score"],["Fire","Medium"],["Security","Low"]])
+        section("5.0 Insurance Gap Analysis")
+        table([
+            ["Area", "Status"],
+            ["Fire Cover", "Adequate"],
+            ["Business Interruption", "Review Needed"]
+        ])
 
-        sec("8.0 Background")
-        sub("8.1 Building"); txt(d.get("building_age"))
-        sub("8.2 GPS"); txt(d.get("gps"))
-        sub("8.3 Employees"); txt(d.get("employees"))
+        section("6.0 Loss Estimation (PML/EML)")
+        table([
+            ["Metric", "Value"],
+            ["Sum Insured", str(d.get("sum_insured",""))],
+            ["Estimated Loss", str(d.get("estimated_loss",""))]
+        ])
 
-        sec("9.0 Construction"); txt(d.get("building_age"))
-        sec("10.0 Process"); txt(d.get("process"))
-        sec("11.0 Electrical"); txt(d.get("electricity"))
-        sec("12.0 Human"); txt(d.get("employees"))
-        sec("13.0 Fire"); txt(d.get("fire"))
-        sec("14.0 Security"); txt(d.get("security"))
-        sec("15.0 Utilities"); txt(d.get("water"))
-        sec("16.0 Machinery"); txt(d.get("computers"))
-        sec("17.0 OSH"); txt(d.get("safety"))
-        sec("18.0 Storage"); txt(d.get("storage"))
-        sec("19.0 NatCat"); txt(d.get("perils"))
-        sec("20.0 Cyber"); txt("Basic controls")
-        sec("21.0 Supply Chain"); txt("Moderate")
-        sec("22.0 Environmental"); txt(d.get("waste"))
-        sec("23.0 BI"); txt(d.get("interruption"))
-        sec("24.0 Governance"); txt("Structured")
+        section("7.0 Overall Risk Scoring Model")
+        table([
+            ["Factor", "Score"],
+            ["Fire Risk", "Medium"],
+            ["Security", "Low"]
+        ])
 
+        section("8.0 Background Information")
+
+        subsection("8.1 History & Age")
+        text_block(d.get("building_age"))
+
+        subsection("8.2 GPS Location & Map")
+        text_block(d.get("gps"))
+
+        subsection("8.3 Employees")
+        text_block(d.get("employees"))
+
+        section("9.0 Construction & Structural Integrity")
+        text_block(d.get("building_age"))
+
+        section("10.0 Occupancy/Processes & Operational Controls")
+        text_block(d.get("process"))
+
+        section("11.0 Electrical Systems Safety")
+        text_block(d.get("electricity"))
+
+        section("12.0 Human Factors")
+        text_block(d.get("employees"))
+
+        section("13.0 Fire, Explosion, and Protection Systems")
+        text_block(d.get("fire"))
+
+        section("14.0 Security Systems")
+        text_block(d.get("security"))
+
+        section("15.0 Utilities & Critical Services")
+        text_block(d.get("water"))
+
+        section("16.0 Machinery & Engineering Systems")
+        text_block(d.get("computers"))
+
+        section("17.0 Occupational Safety & Health (OSH)")
+        text_block(d.get("safety"))
+
+        section("18.0 Storage & Material Handling")
+        text_block(d.get("storage"))
+
+        section("19.0 Natural Catastrophes (NatCat)")
+        text_block(d.get("perils"))
+
+        section("20.0 Cyber & Information Security")
+        text_block("Basic controls observed")
+
+        section("21.0 Supply Chain & Logistics")
+        text_block("Moderate dependency")
+
+        section("22.0 Environmental Management")
+        text_block(d.get("waste"))
+
+        section("23.0 Business Continuity (BI)")
+        text_block(d.get("interruption"))
+
+        section("24.0 Management Systems & Risk Governance")
+        text_block("Management controls in place")
+
+        # =========================
+        # BUILD
+        # =========================
         doc.build(story, onFirstPage=header, onLaterPages=header)
 
-        with open("professional_report.pdf","rb") as f:
-            st.download_button("⬇️ Download Report", f, "professional_report.pdf")
+        with open("professional_report.pdf", "rb") as f:
+            st.download_button("⬇️ Download Professional Report", f, "professional_report.pdf")
 
 # =========================
 # NAV BUTTONS
