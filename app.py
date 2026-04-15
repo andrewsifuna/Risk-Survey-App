@@ -2055,7 +2055,7 @@ story.append(PageBreak())
             return [
         Paragraph(title, h2),
         Spacer(1, 8)
-    ]
+            ]
 
         def subsection(title):
             story.append(Paragraph(title, h3))
