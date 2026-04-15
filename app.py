@@ -118,7 +118,6 @@ elif section == "Client Info":
 
     d["gps"] = st.text_input("GPS Coordinates", d.get("gps", ""))
 
-    # Distance calculation
     if d.get("gps") and "," in d["gps"]:
         lat, lon = map(float, d["gps"].split(","))
         distance = geodesic((lat, lon), (-1.286389, 36.817223)).km
@@ -138,7 +137,7 @@ elif section == "Business Overview":
     d["background"] = st.text_area("Background")
 
 # =========================
-# ✅ MISSING SECTIONS FIX (INSERTED HERE)
+# OTHER SECTIONS
 # =========================
 elif section == "Site Buildings":
     st.header("Site Buildings")
@@ -228,6 +227,25 @@ elif section == "Risk Appraisal":
     st.success(f"Loss: {loss:,.2f}")
 
 # =========================
+# 🔥 FINAL MISSING SECTIONS (FIXED)
+# =========================
+elif section == "Hazardous Substances":
+    st.header("Hazardous Substances")
+    d["hazardous"] = st.text_area("List Hazardous Substances")
+
+elif section == "Unions":
+    st.header("Unions")
+    d["unions"] = st.text_area("Union Presence / Issues")
+
+elif section == "Losses Report":
+    st.header("Losses Report")
+    d["losses"] = st.text_area("Past Losses / Claims History")
+
+elif section == "Interruption Analysis":
+    st.header("Interruption Analysis")
+    d["interruption"] = st.text_area("Business Interruption Details")
+
+# =========================
 # SUBMIT
 # =========================
 elif section == "Submit":
@@ -243,6 +261,12 @@ elif section == "Submit":
 
         with open("report.pdf", "rb") as f:
             st.download_button("Download", f)
+
+# =========================
+# 🚨 FALLBACK (NO BLANK SCREENS EVER)
+# =========================
+else:
+    st.warning(f"⚠️ Section '{section}' not yet implemented")
 
 # =========================
 # NAV
