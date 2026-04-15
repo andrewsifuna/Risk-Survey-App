@@ -493,15 +493,14 @@ elif section == "Machinery & Engineering Systems":
     # =========================
 
     def safe_index(options, value, default=0):
-    return options.index(value) if value in options else default
+        return options.index(value) if value in options else default
     
     options = ["Low", "Moderate", "High"]
     
     d["process_operator_skill"] = st.selectbox(
     "Operator Skill Level",
     options,
-    index=safe_index(options, d.get("process_operator_skill", "Moderate"))
-)
+    index=safe_index(options, d.get("process_operator_skill", "Moderate")))
 
     # =========================
     # AUTOMATION LEVEL
