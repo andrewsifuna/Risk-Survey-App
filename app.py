@@ -2,6 +2,8 @@ import streamlit as st
 import time
 import math
 import requests
+import streamlit.components.v1 as components
+from geopy.distance import geodesic
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
@@ -77,7 +79,6 @@ section = sections[st.session_state.step]
 # =========================
 progress = st.session_state.step / (len(sections) - 1)
 st.progress(progress)
-
 st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 
 # =========================
@@ -90,15 +91,15 @@ if section == "Welcome":
     for i in range(30):
         y_anim = math.sin(i / 5) * 10
         placeholder.markdown(
-            f"<h2 style='text-align:center; color:#008751; transform: translateY({y_anim}px);'>Welcome to Equity Risk Survey</h2>",
+            f"<h2 style='text-align:center; color:#008751;'>Welcome to Equity Risk Survey</h2>",
             unsafe_allow_html=True
         )
-        time.sleep(0.03)
+        time.sleep(0.02)
 
     st.markdown("### Click Next to begin")
 
 # =========================
-# CLIENT INFO + AUTO GPS
+# CLIENT INFO + REAL GPS
 # =========================
 elif section == "Client Info":
     st.header("Client Information")
@@ -106,7 +107,24 @@ elif section == "Client Info":
     d["insured"] = st.text_input("Insured Name", d.get("insured", ""))
     d["address"] = st.text_input("Physical Address", d.get("address", ""))
 
-    # ✅ AUTO GPS
+    # 🌍 OPTION 1 — REAL GPS (Browser)
+    st.markdown("### 📍 Get Real GPS Location")
+
+    components.html("""
+    <script>
+    navigator.geolocation.getCurrentPosition(function(position) {
+        const coords = position.coords.latitude + "," + position.coords.longitude;
+        const streamlitDoc = window.parent.document;
+        const inputs = streamlitDoc.querySelectorAll('input[type="text"]');
+        if (inputs.length > 2) {
+            inputs[2].value = coords;
+            inputs[2].dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    });
+    </script>
+    """, height=0)
+
+    # 🌍 OPTION 2 — IP FALLBACK BUTTON
     def get_location():
         try:
             res = requests.get("https://ipinfo.io/json").json()
@@ -114,15 +132,28 @@ elif section == "Client Info":
         except:
             return "Unavailable", "-", "-"
 
-    if "auto_location" not in d:
+    if st.button("📍 Use Approx Location (Fallback)"):
         loc, city, country = get_location()
-        d["auto_location"] = loc
-        d["city"] = city
-        d["country"] = country
+        d["gps"] = loc
+        st.success(f"Location updated: {loc} ({city}, {country})")
 
-    st.success(f"📍 Auto Location: {d['auto_location']} ({d['city']}, {d['country']})")
+    # GPS INPUT
+    d["gps"] = st.text_input("GPS Coordinates", d.get("gps", ""))
 
-    d["gps"] = st.text_input("GPS Coordinates (Optional Override)", d.get("gps", ""))
+    # 📏 AUTO DISTANCE CALCULATION (NAIROBI)
+    town_coords = (-1.286389, 36.817223)
+
+    if d.get("gps") and "," in d["gps"]:
+        try:
+            lat, lon = map(float, d["gps"].split(","))
+            distance_km = geodesic((lat, lon), town_coords).km
+
+            st.success(f"📏 Distance from Nairobi: {distance_km:.2f} km")
+
+            d["distance"] = f"{distance_km:.2f} km"
+        except:
+            st.warning("Invalid GPS format")
+
     d["distance"] = st.text_input("Distance from Town", d.get("distance", ""))
 
     d["client_photo"] = st.camera_input("Capture Front View")
@@ -138,7 +169,7 @@ elif section == "Business Overview":
     d["background"] = st.text_area("Background", d.get("background", ""))
 
 # =========================
-# PROCESS + AI HAZARD DETECTION
+# PROCESS + AI HAZARDS
 # =========================
 elif section == "Process":
     st.header("Process")
@@ -165,18 +196,14 @@ elif section == "Process":
     hazards = detect_hazards(process)
 
     st.subheader("⚠️ Auto Detected Hazards")
+
     if hazards:
         for h in hazards:
             st.warning(h)
     else:
         st.info("No major hazards detected")
 
-    # ✅ AI FEEL RISK SCORE
-    if hazards:
-        risk_score = min(len(hazards) * 20, 100)
-    else:
-        risk_score = 10
-
+    risk_score = min(len(hazards) * 20, 100) if hazards else 10
     st.metric("Risk Score", f"{risk_score}%")
 
     d["process"] = process
@@ -196,7 +223,6 @@ elif section == "Risk Appraisal":
 
     st.success(f"Estimated Loss: KES {estimated_loss:,.2f}")
 
-    # ✅ RISK LEVEL
     if loss_percent > 70:
         st.error("⚠️ HIGH RISK")
     elif loss_percent > 40:
@@ -207,20 +233,11 @@ elif section == "Risk Appraisal":
     d["estimated_loss"] = estimated_loss
 
 # =========================
-# OTHER SECTIONS (UNCHANGED)
+# MINIMAL OTHER SECTIONS
 # =========================
-elif section == "Site Buildings":
-    st.header("Site Buildings")
-    d["building_age"] = st.text_input("Age, Structure & Roofing")
-    d["floors"] = st.text_input("Floors")
-
 elif section == "Security":
     st.header("Security")
     d["security"] = st.text_area("Security")
-
-elif section == "Computers":
-    st.header("Computers")
-    d["computers"] = st.text_area("IT Systems")
 
 elif section == "Perils":
     st.header("Perils")
