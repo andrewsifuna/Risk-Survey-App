@@ -263,6 +263,29 @@ elif section == "Perils":
 
 elif section == "Process":
     d["process"] = st.text_area("Process")
+    
+elif section == "Hazardous Substances":
+    st.header("Hazardous Substances")
+
+    d["hazardous"] = st.text_area(
+        "List hazardous substances (chemicals, fuels, gases)",
+        d.get("hazardous", "")
+    )
+
+    d["storage_controls"] = st.text_area(
+        "Storage & handling controls (MSDS, ventilation, segregation)",
+        d.get("storage_controls", "")
+    )
+
+    d["ppe"] = st.text_area(
+        "Personal Protective Equipment (PPE) used",
+        d.get("ppe", "")
+    )
+
+    d["spill_measures"] = st.text_area(
+        "Spill / emergency response measures",
+        d.get("spill_measures", "")
+    )
 
 elif section == "Interruption Analysis":
     d["interruption"] = st.text_area("Business Interruption")
