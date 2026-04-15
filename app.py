@@ -173,6 +173,17 @@ elif section == "Business Overview":
 
 elif section == "Site Buildings":
     d["building_age"] = st.text_input("Building Details")
+    
+elif section == "Situation":
+    st.header("Situation")
+
+    d["address"] = st.text_input(
+        "Physical Address", d.get("address", "")
+    )
+
+    d["distance_town"] = st.text_input(
+        "Distance From Town", d.get("distance_town", "")
+    )
 
 elif section == "Utilities":
     d["electricity"] = st.text_area("Electricity")
