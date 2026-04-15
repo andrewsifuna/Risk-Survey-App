@@ -72,17 +72,33 @@ st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 # =========================
 # WELCOME
 # =========================
-if section == "Welcome":
+iif section == "Welcome":
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1,2,1])
 
     with col2:
+
         st.image("equity_logo.png", width=200)
 
-        st.markdown(
-            "<h2 style='text-align:center; color:#008751;'>Equity Risk Survey System</h2>",
-            unsafe_allow_html=True
-        )
+        placeholder = st.empty()
+
+        for i in range(20):  # reduced for smoother UX
+            y_anim = math.sin(i / 3) * 8
+
+            placeholder.markdown(
+                f"""
+                <h2 style='text-align:center;
+                           color:#008751;
+                           transform: translateY({y_anim}px);'>
+                Welcome to Equity Risk Survey
+                </h2>
+                """,
+                unsafe_allow_html=True
+            )
+
+            time.sleep(0.02)
 
         st.markdown(
             "<p style='text-align:center;'>Click Next to begin</p>",
