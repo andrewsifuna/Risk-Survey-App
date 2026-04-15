@@ -286,6 +286,24 @@ elif section == "Hazardous Substances":
         "Spill / emergency response measures",
         d.get("spill_measures", "")
     )
+elif section == "Unions":
+    st.header("Unions & Industrial Relations")
+
+    d["union_presence"] = st.selectbox(
+        "Is there a workers union?",
+        ["No", "Yes"],
+        index=0 if d.get("union_presence","No") == "No" else 1
+    )
+
+    d["union_activity"] = st.text_area(
+        "Union activity / history of strikes / disputes",
+        d.get("union_activity", "")
+    )
+
+    d["labor_risk"] = st.text_area(
+        "Labor-related risks (e.g. unrest, turnover, disputes)",
+        d.get("labor_risk", "")
+    )
 
 elif section == "Interruption Analysis":
     d["interruption"] = st.text_area("Business Interruption")
