@@ -5,6 +5,12 @@ import requests
 import streamlit.components.v1 as components
 from geopy.distance import geodesic
 
+def safe_float(val):
+    try:
+        return float(str(val).replace(",", ""))
+    except:
+        return 0.0
+
 # =========================
 # CONFIG
 # =========================
@@ -1806,24 +1812,24 @@ elif section == "Risk Appraisal":
     # ASSET VALUES
     # =========================
     d["building_value"] = st.number_input(
-        "Building Value (KES)",
-        value=float(d.get("building_value", 0))
-    )
+    "Building Value (KES)",
+    value=safe_float(d.get("building_value", 0))
+)
 
-    d["machinery_value"] = st.number_input(
-        "Machinery Value (KES)",
-        value=float(d.get("machinery_value", 0))
-    )
+d["machinery_value"] = st.number_input(
+    "Machinery Value (KES)",
+    value=safe_float(d.get("machinery_value", 0))
+)
 
-    d["stock_value"] = st.number_input(
-        "Stock Value (KES)",
-        value=float(d.get("stock_value", 0))
-    )
+d["stock_value"] = st.number_input(
+    "Stock Value (KES)",
+    value=safe_float(d.get("stock_value", 0))
+)
 
-    d["furniture_value"] = st.number_input(
-        "Furniture & Fixtures (KES)",
-        value=float(d.get("furniture_value", 0))
-    )
+d["furniture_value"] = st.number_input(
+    "Furniture & Fixtures (KES)",
+    value=safe_float(d.get("furniture_value", 0))
+)
 
     # =========================
     # TOTAL VALUE
