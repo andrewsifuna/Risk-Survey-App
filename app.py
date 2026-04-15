@@ -1813,23 +1813,19 @@ elif section == "Risk Appraisal":
     # =========================
     d["building_value"] = st.number_input(
     "Building Value (KES)",
-    value=safe_float(d.get("building_value", 0))
-)
-
-d["machinery_value"] = st.number_input(
+    value=safe_float(d.get("building_value", 0)))
+    
+    d["machinery_value"] = st.number_input(
     "Machinery Value (KES)",
-    value=safe_float(d.get("machinery_value", 0))
-)
-
-d["stock_value"] = st.number_input(
+    value=safe_float(d.get("machinery_value", 0)))
+    
+    d["stock_value"] = st.number_input(
     "Stock Value (KES)",
-    value=safe_float(d.get("stock_value", 0))
-)
-
-d["furniture_value"] = st.number_input(
+    value=safe_float(d.get("stock_value", 0)))
+    
+    d["furniture_value"] = st.number_input(
     "Furniture & Fixtures (KES)",
-    value=safe_float(d.get("furniture_value", 0))
-)
+    value=safe_float(d.get("furniture_value", 0)))
 
     # =========================
     # TOTAL VALUE
