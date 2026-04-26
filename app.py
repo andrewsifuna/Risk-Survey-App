@@ -2033,6 +2033,16 @@ elif section == "Submit":
 
         doc = SimpleDocTemplate("final_equity_report.pdf")
         styles = getSampleStyleSheet()
+        normal = styles["Normal"]
+        section_title = ParagraphStyle(
+            name="section_title",
+            fontSize=14,
+            leading=16,
+            textColor=colors.HexColor("#A6192E"),
+            spaceAfter=10,
+            spaceBefore=10,
+            alignment=0  # left aligned
+        )
         story = []
 
         # =========================
@@ -2258,6 +2268,7 @@ elif section == "Submit":
 
         with open("final_equity_report.pdf", "rb") as f:
             st.download_button("⬇️ Download Final Report", f, "final_equity_report.pdf")
+        
     # =========================
 # 🚨 FALLBACK (NO BLANK SCREENS EVER)
 # =========================
