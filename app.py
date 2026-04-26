@@ -2004,17 +2004,14 @@ elif section == "Submit":
         def add_layout(canvas, doc):
             width, height = doc.pagesize
 
-            # HEADER TEXT
             canvas.setFont("Helvetica", 9)
             canvas.drawCentredString(
                 width / 2, height - 30,
                 "EQUITY GENERAL INSURANCE (KENYA) LTD.\nRegulated by Insurance Regulatory Authority"
             )
 
-            # LOGO
             canvas.drawImage("equity_logo.png", 40, height - 80, width=100, height=40)
 
-            # WATERMARK (EGIK)
             canvas.saveState()
             canvas.setFont("Helvetica-Bold", 80)
             canvas.setFillColor(EQUITY_RED)
@@ -2022,14 +2019,12 @@ elif section == "Submit":
             canvas.drawCentredString(width/2, height/2, "EGIK")
             canvas.restoreState()
 
-            # FOOTER BAR
             canvas.setFillColor(EQUITY_RED)
             canvas.rect(0, 25, width*0.6, 5, fill=1)
 
             canvas.setFillColor(colors.grey)
             canvas.rect(width*0.6, 25, width*0.4, 5, fill=1)
 
-            # PAGE NUMBER CENTERED
             canvas.setFillColor(colors.black)
             canvas.setFont("Helvetica", 9)
             canvas.drawCentredString(width/2, 15, str(doc.page))
@@ -2038,7 +2033,6 @@ elif section == "Submit":
         # PAGE 1 — COVER PAGE
         # =========================
         story.append(Spacer(1, 100))
-
         story.append(Paragraph("<b>RISK SURVEY REPORT</b>", title))
         story.append(Spacer(1, 40))
 
@@ -2077,10 +2071,10 @@ elif section == "Submit":
         story.append(PageBreak())
 
         # =========================
-        # PAGE 3 — SECTIONS 1–3
+        # PAGE 3
         # =========================
         story.append(Paragraph("1. EXECUTIVE SUMMARY", section_title))
-        story.append(Paragraph(d.get("summary", ""), normal))
+        story.append(Paragraph(clean_text(d.get("summary", "")), normal))
 
         story.append(Spacer(1, 20))
 
@@ -2104,15 +2098,15 @@ elif section == "Submit":
         story.append(Spacer(1, 20))
 
         story.append(Paragraph("3. INTRODUCTION", section_title))
-        story.append(Paragraph(d.get("intro",""), normal))
+        story.append(Paragraph(clean_text(d.get("intro","")), normal))
 
         story.append(PageBreak())
 
         # =========================
-        # PAGE 4 — SECTIONS 4–6
+        # PAGE 4
         # =========================
         story.append(Paragraph("4. BACKGROUND INFORMATION", section_title))
-        story.append(Paragraph(d.get("background",""), normal))
+        story.append(Paragraph(clean_text(d.get("background","")), normal))
 
         story.append(Spacer(1, 20))
 
@@ -2134,7 +2128,7 @@ elif section == "Submit":
         story.append(PageBreak())
 
         # =========================
-        # PAGE 5 — SECTION 7
+        # PAGE 5
         # =========================
         story.append(Paragraph("7. INSURANCE PROGRAM REVIEW", section_title))
 
@@ -2149,38 +2143,38 @@ elif section == "Submit":
         story.append(PageBreak())
 
         # =========================
-        # PAGE 6 — SECTIONS 8–10
+        # PAGE 6
         # =========================
         story.append(Paragraph("8. PROCESS DESCRIPTION & HAZARDS ANALYSIS", section_title))
-        story.append(Paragraph(d.get("process",""), normal))
+        story.append(Paragraph(clean_text(d.get("process","")), normal))
 
         story.append(Spacer(1, 20))
 
         story.append(Paragraph("9. FIRE & EXPLOSION RISK ASSESSMENT", section_title))
-        story.append(Paragraph(d.get("fire",""), normal))
+        story.append(Paragraph(clean_text(d.get("fire","")), normal))
 
         story.append(Spacer(1, 20))
 
         story.append(Paragraph("10. SECURITY ARRANGEMENTS", section_title))
-        story.append(Paragraph(d.get("security",""), normal))
+        story.append(Paragraph(clean_text(d.get("security","")), normal))
 
         story.append(PageBreak())
 
         # =========================
-        # PAGE 7 — SECTIONS 11–13
+        # PAGE 7
         # =========================
         story.append(Paragraph("11. UTILITIES & SERVICES", section_title))
-        story.append(Paragraph(d.get("utilities",""), normal))
+        story.append(Paragraph(clean_text(d.get("utilities","")), normal))
 
         story.append(Spacer(1, 20))
 
         story.append(Paragraph("12. LOSS POTENTIAL PML", section_title))
-        story.append(Paragraph(d.get("pml",""), normal))
+        story.append(Paragraph(clean_text(d.get("pml","")), normal))
 
         story.append(Spacer(1, 20))
 
         story.append(Paragraph("13. UNDERWRITING REMARKS", section_title))
-        story.append(Paragraph(d.get("remarks",""), normal))
+        story.append(Paragraph(clean_text(d.get("remarks","")), normal))
 
         story.append(Spacer(1, 40))
 
