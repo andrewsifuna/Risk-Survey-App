@@ -2073,14 +2073,16 @@ elif section == "Submit":
             "13. UNDERWRITING REMARKS",
         ]
 
-        # CLEAN WORD-LIKE FORMATTING
+        # CONTENT LIST (LEFT ALIGNED + ORANGE)
         for c in contents:
             story.append(Paragraph(
                 c,
                 ParagraphStyle(
                     name="toc_item",
                     fontSize=12,
-                    leftIndent=60,     # 👈 key for Word look
+                    alignment=0,  # 👈 LEFT ALIGN (important)
+                    textColor=colors.HexColor("#D35400"), 
+                    leftIndent=40,   # slight indent like Word
                     spaceAfter=10,
                     leading=14
                 )
