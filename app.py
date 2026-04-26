@@ -2002,52 +2002,113 @@ elif section == "Submit":
         # HEADER + FOOTER + WATERMARK
         # =========================
         def add_layout(canvas, doc):
-    width, height = doc.pagesize
-
-    # =========================
-    # WATERMARK (CENTER)
-    # =========================
-    canvas.saveState()
-    canvas.setFont("Helvetica-Bold", 100)
-    canvas.setFillColor(colors.HexColor("#A6192E"))
-    canvas.setFillAlpha(0.05)
-    canvas.drawCentredString(width / 2, height / 2, "EGIK")
-    canvas.restoreState()
-
-    # =========================
-    # FOOTER TEXT (LOWER — MATCH IMAGE)
-    # =========================
-    canvas.setFont("Helvetica-Bold", 11)
-    canvas.setFillColor(colors.grey)
-    canvas.drawCentredString(width / 2, 55, "EQUITY GENERAL INSURANCE (KENYA) LTD.")
-
-    canvas.setFont("Helvetica", 10)
-    canvas.drawCentredString(
-        width / 2,
-        40,
-        "Equity General Insurance (Kenya) Ltd. is regulated by Insurance Regulatory Authority"
-    )
-
-    # =========================
-    # PAGE NUMBER (BOTTOM CENTER)
-    # =========================
-    canvas.setFont("Helvetica", 10)
-    canvas.setFillColor(colors.black)
-    canvas.drawCentredString(width / 2, 20, str(doc.page))
+            width, height = doc.pagesize
+            
+            # =========================
+            # WATERMARK (CENTER)
+            # =========================
+            canvas.saveState()
+            canvas.setFont("Helvetica-Bold", 100)
+            canvas.setFillColor(colors.HexColor("#A6192E"))
+            canvas.setFillAlpha(0.05)
+            canvas.drawCentredString(width / 2, height / 2, "EGIK")
+            canvas.restoreState()
+            
+            # =========================
+            # FOOTER TEXT (LOWER — MATCH IMAGE)
+            # =========================
+            
+            canvas.setFont("Helvetica-Bold", 11)
+            canvas.setFillColor(colors.grey)
+            canvas.drawCentredString(width / 2, 55, "EQUITY GENERAL INSURANCE (KENYA) LTD.")
+            
+            canvas.setFont("Helvetica", 10)
+            canvas.drawCentredString(
+                width / 2,
+                40,
+                "Equity General Insurance (Kenya) Ltd. is regulated by Insurance Regulatory Authority"
+            )
+            
+            # =========================
+            # PAGE NUMBER (BOTTOM CENTER)
+            # =========================
+            canvas.setFont("Helvetica", 10)
+            canvas.setFillColor(colors.black)
+            canvas.drawCentredString(width / 2, 20, str(doc.page))
 
         # =========================
         # PAGE 1 — COVER PAGE
         # =========================
-        story.append(Spacer(1, 100))
-        story.append(Paragraph("<b>RISK SURVEY REPORT</b>", title))
+        # =========================
+        # PAGE 1 — COVER PAGE (EXACT MATCH)
+        # =========================
+
+        story.append(Spacer(1, 30))
+
+        # LOGO (TOP LEFT)
+        story.append(Image("equity_logo.png", width=140, height=60))
+
+        story.append(Spacer(1, 20))
+
+        # TITLE
+        story.append(Paragraph(
+            "<b>RISK SURVEY REPORT</b>",
+            ParagraphStyle(name="t1", alignment=1, fontSize=18)
+        ))
+
+        story.append(Spacer(1, 10))
+
+        # BLUE LINE
+        story.append(Table(
+            [[""]],
+            colWidths=[450],
+            rowHeights=[2],
+            style=[("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#2E64FE"))]
+        ))
+
         story.append(Spacer(1, 40))
 
-        story.append(Paragraph("<b>LIMBUA GROUP – GITHURE</b>", styles["Heading2"]))
-        story.append(Paragraph("MACADAMIA PROCESSING FACILITY", normal))
-        story.append(Paragraph("GITHURE, KUTUS KIRINYAGA COUNTY", normal))
+        # COVER PHOTO TEXT
+        story.append(Paragraph("<b>UPON</b>", ParagraphStyle(name="t2", alignment=1, fontSize=14)))
+        story.append(Paragraph("<b>COVER PHOTO</b>", ParagraphStyle(name="t3", alignment=1, fontSize=14)))
+
+        story.append(Spacer(1, 50))
+
+        # CLIENT NAME
+        story.append(Paragraph("<b>CLIENT NAME</b>", ParagraphStyle(name="t4", alignment=1, fontSize=16)))
+
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph("<b>Example 👉 (</b>", ParagraphStyle(name="t5", alignment=1, fontSize=14)))
+
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph("<b>– LIMBUA GROUP – GITHURE –</b>", ParagraphStyle(name="t6", alignment=1, fontSize=14)))
+
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph("<b>MACADAMIA PROCESSING FACILITY</b>", ParagraphStyle(name="t7", alignment=1, fontSize=12)))
+        story.append(Paragraph("<b>GITHURE, KUTUS KIRINYAGA COUNTY</b>", ParagraphStyle(name="t8", alignment=1, fontSize=12)))
 
         story.append(Spacer(1, 40))
-        story.append(Paragraph("26TH MARCH 2026", styles["Heading3"]))
+
+        # DATE
+        story.append(Paragraph("<b>DATE</b>", ParagraphStyle(name="t9", alignment=1, fontSize=14)))
+
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph("Example see below", ParagraphStyle(name="t10", alignment=1, fontSize=12)))
+
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph("👇", ParagraphStyle(name="t11", alignment=1, fontSize=14)))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph(
+            "<b>26<sup>TH</sup> MARCH 2026</b>",
+            ParagraphStyle(name="t12", alignment=1, fontSize=14)
+        ))
 
         story.append(PageBreak())
 
@@ -2195,7 +2256,6 @@ elif section == "Submit":
 
         with open("final_equity_report.pdf", "rb") as f:
             st.download_button("⬇️ Download Final Report", f, "final_equity_report.pdf")
-
     # =========================
 # 🚨 FALLBACK (NO BLANK SCREENS EVER)
 # =========================
