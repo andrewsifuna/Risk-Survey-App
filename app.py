@@ -1947,233 +1947,230 @@ elif section == "Risk Appraisal":
     else:
         st.success("✅ LOW RISK")
 
-# =========================
-# SUBMIT (FINAL PROFESSIONAL)
-# =========================
 elif section == "Submit":
 
-    st.header("Generate Professional Report")
+    st.header("Generate Final Equity Risk Survey Report")
 
-    if st.button("📄 Generate Professional PDF"):
+    if st.button("📄 Generate Final Report"):
 
         from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak
         from reportlab.lib import colors
-        from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib.units import inch
+        from reportlab.pdfgen import canvas
 
-        doc = SimpleDocTemplate("professional_report.pdf")
+        # =========================
+        # BRAND COLORS (EQUITY)
+        # =========================
+        EQUITY_RED = colors.HexColor("#A6192E")
+        LIGHT_GREY = colors.HexColor("#E6E6E6")
+
+        doc = SimpleDocTemplate("final_equity_report.pdf")
         styles = getSampleStyleSheet()
+
+        title = ParagraphStyle(name="title", fontSize=18, alignment=1, spaceAfter=20)
+        section_title = ParagraphStyle(name="section", fontSize=14, textColor=EQUITY_RED, spaceAfter=10)
+        normal = styles["Normal"]
 
         story = []
 
-        title = styles["Heading1"]
-        h2 = styles["Heading2"]
-        h3 = styles["Heading3"]
-        normal = styles["Normal"]
+        # =========================
+        # HEADER + FOOTER + WATERMARK
+        # =========================
+        def add_layout(canvas, doc):
+            width, height = doc.pagesize
 
-        # =========================
-        # HEADER / FOOTER
-        # =========================
-        def header(canvas, doc):
-            canvas.drawImage("equity_logo.png", 40, 750, width=80, height=40)
+            # HEADER TEXT
             canvas.setFont("Helvetica", 9)
-            canvas.drawString(40, 20, "Equity General Insurance (Kenya) Ltd")
-            canvas.drawRightString(550, 20, f"Page {doc.page}")
+            canvas.drawCentredString(
+                width / 2, height - 30,
+                "EQUITY GENERAL INSURANCE (KENYA) LTD.\nRegulated by Insurance Regulatory Authority"
+            )
 
-                # =========================
-        # COVER PAGE
+            # LOGO
+            canvas.drawImage("equity_logo.png", 40, height - 80, width=100, height=40)
+
+            # WATERMARK (EGIK)
+            canvas.saveState()
+            canvas.setFont("Helvetica-Bold", 80)
+            canvas.setFillColor(EQUITY_RED)
+            canvas.setFillAlpha(0.08)
+            canvas.drawCentredString(width/2, height/2, "EGIK")
+            canvas.restoreState()
+
+            # FOOTER BAR
+            canvas.setFillColor(EQUITY_RED)
+            canvas.rect(0, 25, width*0.6, 5, fill=1)
+
+            canvas.setFillColor(colors.grey)
+            canvas.rect(width*0.6, 25, width*0.4, 5, fill=1)
+
+            # PAGE NUMBER CENTERED
+            canvas.setFillColor(colors.black)
+            canvas.setFont("Helvetica", 9)
+            canvas.drawCentredString(width/2, 15, str(doc.page))
+
         # =========================
+        # PAGE 1 — COVER PAGE
+        # =========================
+        story.append(Spacer(1, 100))
 
-        from reportlab.lib.units import inch
-        from reportlab.platypus import Spacer, Table, TableStyle
-        from reportlab.lib import colors
-
-        # Logo + Company Header
-        header_table = Table([
-            [
-                Image("equity_logo.png", width=120, height=60),
-                Paragraph("<b>Equity General Insurance (Kenya) Ltd</b>", styles["Title"])
-            ]
-        ], colWidths=[150, 350])
-
-        header_table.setStyle(TableStyle([
-            ("VALIGN", (0,0), (-1,-1), "MIDDLE")
-        ]))
-
-        story.append(header_table)
+        story.append(Paragraph("<b>RISK SURVEY REPORT</b>", title))
         story.append(Spacer(1, 40))
 
-        # Main Title (Centered)
-        story.append(Paragraph(
-            "<para align='center'><b>RISK SURVEY REPORT</b></para>",
-            styles["Heading1"]
-        ))
-        story.append(Spacer(1, 30))
-
-        # Client Details Box
-        details = [
-            ["Insured:", d.get("insured","")],
-            ["Address:", d.get("address","")],
-            ["Survey Date:", time.strftime("%d %B %Y")]
-        ]
-
-        details_table = Table(details, colWidths=[120, 350])
-
-        details_table.setStyle(TableStyle([
-            ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
-            ("BACKGROUND", (0,0), (0,-1), colors.lightgrey),
-        ]))
-
-        story.append(details_table)
-        story.append(Spacer(1, 30))
-
-        # Client Photo (Centered)
-        if d.get("client_photo"):
-            with open("photo.jpg", "wb") as f:
-                f.write(d["client_photo"].getbuffer())
-
-            img = Image("photo.jpg", width=400, height=250)
-            img.hAlign = 'CENTER'
-            story.append(img)
+        story.append(Paragraph("<b>LIMBUA GROUP – GITHURE</b>", styles["Heading2"]))
+        story.append(Paragraph("MACADAMIA PROCESSING FACILITY", normal))
+        story.append(Paragraph("GITHURE, KUTUS KIRINYAGA COUNTY", normal))
 
         story.append(Spacer(1, 40))
-
-        # Footer Info
-        story.append(Paragraph(
-            "<para align='center'>Confidential Risk Assessment Report</para>",
-            styles["Normal"]
-        ))
+        story.append(Paragraph("26TH MARCH 2026", styles["Heading3"]))
 
         story.append(PageBreak())
 
         # =========================
-        # HELPERS
+        # PAGE 2 — CONTENTS
         # =========================
-        def section(title):
-            return [
-        Paragraph(title, h2),
-        Spacer(1, 8)
-            ]
+        contents = [
+            "1. EXECUTIVE SUMMARY",
+            "2. CONTROL & CONTACT DETAILS",
+            "3. INTRODUCTION",
+            "4. BACKGROUND INFORMATION",
+            "5. RISK IMPROVEMENT RECOMMENDATIONS",
+            "6. RISK SCORING MATRIX",
+            "7. INSURANCE PROGRAM REVIEW",
+            "8. PROCESS DESCRIPTION & HAZARDS ANALYSIS",
+            "9. FIRE & EXPLOSION RISK ASSESSMENT",
+            "10. SECURITY ARRANGEMENTS",
+            "11. UTILITIES & SERVICES",
+            "12. LOSS POTENTIAL PML",
+            "13. UNDERWRITING REMARKS"
+        ]
 
-        def subsection(title):
-            story.append(Paragraph(title, h3))
-            story.append(Spacer(1, 5))
+        for c in contents:
+            story.append(Paragraph(c, normal))
+            story.append(Spacer(1, 8))
 
-        def text_block(text):
-            story.append(Paragraph(text or "-", normal))
-            story.append(Spacer(1, 10))
-
-        def table(data):
-            t = Table(data)
-            t.setStyle(TableStyle([
-                ("GRID", (0,0), (-1,-1), 1, colors.black),
-                ("BACKGROUND", (0,0), (-1,0), colors.grey),
-                ("TEXTCOLOR",(0,0),(-1,0),colors.white)
-            ]))
-            story.append(t)
-            story.append(Spacer(1, 15))
+        story.append(PageBreak())
 
         # =========================
-        # PROFESSIONAL STRUCTURE
+        # PAGE 3 — SECTIONS 1–3
         # =========================
-        section("1.0 Contacts & Control Sheet")
-        text_block(d.get("contacts"))
+        story.append(Paragraph("1. EXECUTIVE SUMMARY", section_title))
+        story.append(Paragraph(d.get("summary", ""), normal))
 
-        section("2.0 Disclaimer & Risk Survey Sign-Off")
-        text_block("This report reflects observed conditions at time of survey.")
+        story.append(Spacer(1, 20))
 
-        section("3.0 Executive Summary")
-        text_block("Overall risk profile based on survey inputs.")
+        story.append(Paragraph("2. CONTROL & CONTACT DETAILS", section_title))
 
-        section("4.0 Risk Improvement Recommendations (RIRs)")
-        text_block("• Improve fire systems\n• Enhance safety controls")
+        contact_data = [
+            ["Insured", d.get("insured","")],
+            ["Location", d.get("location","")],
+            ["Nature of Business", d.get("business","")],
+            ["Employees", d.get("employees","")],
+            ["Utilities", d.get("utilities","")],
+            ["Survey Conducted By", d.get("surveyors","")],
+        ]
 
-        section("5.0 Insurance Gap Analysis")
-        table([
-            ["Area", "Status"],
-            ["Fire Cover", "Adequate"],
-            ["Business Interruption", "Review Needed"]
-        ])
+        table = Table(contact_data, colWidths=[180, 300])
+        table.setStyle(TableStyle([
+            ("GRID", (0,0), (-1,-1), 1, colors.black)
+        ]))
+        story.append(table)
 
-        section("6.0 Loss Estimation (PML/EML)")
-        table([
-            ["Metric", "Value"],
-            ["Sum Insured", str(d.get("sum_insured",""))],
-            ["Estimated Loss", str(d.get("estimated_loss",""))]
-        ])
+        story.append(Spacer(1, 20))
 
-        section("7.0 Overall Risk Scoring Model")
-        table([
-            ["Factor", "Score"],
-            ["Fire Risk", "Medium"],
-            ["Security", "Low"]
-        ])
+        story.append(Paragraph("3. INTRODUCTION", section_title))
+        story.append(Paragraph(d.get("intro",""), normal))
 
-        section("8.0 Background Information")
-
-        subsection("8.1 History & Age")
-        text_block(d.get("building_age"))
-
-        subsection("8.2 GPS Location & Map")
-        text_block(d.get("gps"))
-
-        subsection("8.3 Employees")
-        text_block(d.get("employees"))
-
-        section("9.0 Construction & Structural Integrity")
-        text_block(d.get("building_age"))
-
-        section("10.0 Occupancy/Processes & Operational Controls")
-        text_block(d.get("process"))
-
-        section("11.0 Electrical Systems Safety")
-        text_block(d.get("electricity"))
-
-        section("12.0 Human Factors")
-        text_block(d.get("employees"))
-
-        section("13.0 Fire, Explosion, and Protection Systems")
-        text_block(d.get("fire"))
-
-        section("14.0 Security Systems")
-        text_block(d.get("security"))
-
-        section("15.0 Utilities & Critical Services")
-        text_block(d.get("water"))
-
-        section("16.0 Machinery & Engineering Systems")
-        text_block(d.get("computers"))
-
-        section("17.0 Occupational Safety & Health (OSH)")
-        text_block(d.get("safety"))
-
-        section("18.0 Storage & Material Handling")
-        text_block(d.get("storage"))
-
-        section("19.0 Natural Catastrophes (NatCat)")
-        text_block(d.get("perils"))
-
-        section("20.0 Cyber & Information Security")
-        text_block("Basic controls observed")
-
-        section("21.0 Supply Chain & Logistics")
-        text_block("Moderate dependency")
-
-        section("22.0 Environmental Management")
-        text_block(d.get("waste"))
-
-        section("23.0 Business Continuity (BI)")
-        text_block(d.get("interruption"))
-
-        section("24.0 Management Systems & Risk Governance")
-        text_block("Management controls in place")
+        story.append(PageBreak())
 
         # =========================
-        # BUILD
+        # PAGE 4 — SECTIONS 4–6
         # =========================
-        doc.build(story, onFirstPage=header, onLaterPages=header)
+        story.append(Paragraph("4. BACKGROUND INFORMATION", section_title))
+        story.append(Paragraph(d.get("background",""), normal))
 
-        with open("professional_report.pdf", "rb") as f:
-            st.download_button("⬇️ Download Professional Report", f, "professional_report.pdf")
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("5. RISK IMPROVEMENT RECOMMENDATIONS", section_title))
+
+        rir = [["Recommendation","Description","Cost","Timeline"]]
+        for r in d.get("rir", []):
+            rir.append(r)
+
+        t = Table(rir)
+        t.setStyle(TableStyle([("GRID",(0,0),(-1,-1),1,colors.black)]))
+        story.append(t)
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("6. RISK SCORING MATRIX", section_title))
+        story.append(Paragraph("Risk Score = Likelihood × Severity", normal))
+
+        story.append(PageBreak())
+
+        # =========================
+        # PAGE 5 — SECTION 7
+        # =========================
+        story.append(Paragraph("7. INSURANCE PROGRAM REVIEW", section_title))
+
+        ins = [["Class","Coverage","Risks","Limits","Extensions"]]
+        for i in d.get("insurance", []):
+            ins.append(i)
+
+        t = Table(ins)
+        t.setStyle(TableStyle([("GRID",(0,0),(-1,-1),1,colors.black)]))
+        story.append(t)
+
+        story.append(PageBreak())
+
+        # =========================
+        # PAGE 6 — SECTIONS 8–10
+        # =========================
+        story.append(Paragraph("8. PROCESS DESCRIPTION & HAZARDS ANALYSIS", section_title))
+        story.append(Paragraph(d.get("process",""), normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("9. FIRE & EXPLOSION RISK ASSESSMENT", section_title))
+        story.append(Paragraph(d.get("fire",""), normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("10. SECURITY ARRANGEMENTS", section_title))
+        story.append(Paragraph(d.get("security",""), normal))
+
+        story.append(PageBreak())
+
+        # =========================
+        # PAGE 7 — SECTIONS 11–13
+        # =========================
+        story.append(Paragraph("11. UTILITIES & SERVICES", section_title))
+        story.append(Paragraph(d.get("utilities",""), normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("12. LOSS POTENTIAL PML", section_title))
+        story.append(Paragraph(d.get("pml",""), normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("13. UNDERWRITING REMARKS", section_title))
+        story.append(Paragraph(d.get("remarks",""), normal))
+
+        story.append(Spacer(1, 40))
+
+        story.append(Paragraph("<b>Report By: Boniface Ondara</b>", normal))
+        story.append(Paragraph("Risk Surveyor", normal))
+        story.append(Paragraph("Equity General Insurance Kenya Limited", normal))
+
+        # =========================
+        # BUILD PDF
+        # =========================
+        doc.build(story, onFirstPage=add_layout, onLaterPages=add_layout)
+
+        with open("final_equity_report.pdf", "rb") as f:
+            st.download_button("⬇️ Download Final Report", f, "final_equity_report.pdf")
 
     # =========================
 # 🚨 FALLBACK (NO BLANK SCREENS EVER)
