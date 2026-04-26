@@ -2002,32 +2002,33 @@ elif section == "Submit":
         # HEADER + FOOTER + WATERMARK
         # =========================
         def add_layout(canvas, doc):
-            width, height = doc.pagesize
+    width, height = doc.pagesize
 
-            canvas.setFont("Helvetica", 9)
-            canvas.drawCentredString(
-                width / 2, height - 30,
-                "EQUITY GENERAL INSURANCE (KENYA) LTD.\nRegulated by Insurance Regulatory Authority"
-            )
+    # =========================
+    # WATERMARK (CENTER)
+    # =========================
+    canvas.saveState()
+    canvas.setFont("Helvetica-Bold", 80)
+    canvas.setFillColor(colors.HexColor("#A6192E"))
+    canvas.setFillAlpha(0.08)
+    canvas.drawCentredString(width / 2, height / 2, "EGIK")
+    canvas.restoreState()
 
-            canvas.drawImage("equity_logo.png", 40, height - 80, width=100, height=40)
+    # =========================
+    # FOOTER TEXT (CENTERED)
+    # =========================
+    canvas.setFont("Helvetica", 8)
+    canvas.setFillColor(colors.black)
 
-            canvas.saveState()
-            canvas.setFont("Helvetica-Bold", 80)
-            canvas.setFillColor(EQUITY_RED)
-            canvas.setFillAlpha(0.08)
-            canvas.drawCentredString(width/2, height/2, "EGIK")
-            canvas.restoreState()
+    footer_text = "EQUITY GENERAL INSURANCE (KENYA) LTD REGULATED BY INSURANCE REGULATORY AUTHORITY"
 
-            canvas.setFillColor(EQUITY_RED)
-            canvas.rect(0, 25, width*0.6, 5, fill=1)
+    canvas.drawCentredString(width / 2, 30, footer_text)
 
-            canvas.setFillColor(colors.grey)
-            canvas.rect(width*0.6, 25, width*0.4, 5, fill=1)
-
-            canvas.setFillColor(colors.black)
-            canvas.setFont("Helvetica", 9)
-            canvas.drawCentredString(width/2, 15, str(doc.page))
+    # =========================
+    # PAGE NUMBER
+    # =========================
+    canvas.setFont("Helvetica", 9)
+    canvas.drawCentredString(width / 2, 15, str(doc.page))
 
         # =========================
         # PAGE 1 — COVER PAGE
