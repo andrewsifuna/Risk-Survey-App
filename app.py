@@ -2002,36 +2002,38 @@ elif section == "Submit":
         # HEADER + FOOTER + WATERMARK
         # =========================
         def add_layout(canvas, doc):
-            width, height = doc.pagesize
+    width, height = doc.pagesize
 
-            # =========================
-            # WATERMARK (CENTER)
-            # =========================
-            canvas.saveState()
-            canvas.setFont("Helvetica-Bold", 90)
-            canvas.setFillColor(colors.HexColor("#A6192E"))
-            canvas.setFillAlpha(0.06)
-            canvas.drawCentredString(width / 2, height / 2, "EGIK")
-            canvas.restoreState()
+    # =========================
+    # WATERMARK (CENTER)
+    # =========================
+    canvas.saveState()
+    canvas.setFont("Helvetica-Bold", 100)
+    canvas.setFillColor(colors.HexColor("#A6192E"))
+    canvas.setFillAlpha(0.05)
+    canvas.drawCentredString(width / 2, height / 2, "EGIK")
+    canvas.restoreState()
 
-            # =========================
-            # FOOTER TEXT (BOTTOM CENTER)
-            # =========================
-            canvas.setFont("Helvetica", 9)
-            canvas.setFillColor(colors.grey)
+    # =========================
+    # FOOTER TEXT (LOWER — MATCH IMAGE)
+    # =========================
+    canvas.setFont("Helvetica-Bold", 11)
+    canvas.setFillColor(colors.grey)
+    canvas.drawCentredString(width / 2, 55, "EQUITY GENERAL INSURANCE (KENYA) LTD.")
 
-            footer_text_1 = "EQUITY GENERAL INSURANCE (KENYA) LTD."
-            footer_text_2 = "Equity General Insurance (Kenya) Ltd. is regulated by Insurance Regulatory Authority"
+    canvas.setFont("Helvetica", 10)
+    canvas.drawCentredString(
+        width / 2,
+        40,
+        "Equity General Insurance (Kenya) Ltd. is regulated by Insurance Regulatory Authority"
+    )
 
-            canvas.drawCentredString(width / 2, 40, footer_text_1)
-            canvas.drawCentredString(width / 2, 28, footer_text_2)
-
-            # =========================
-            # PAGE NUMBER (VERY BOTTOM)
-            # =========================
-            canvas.setFont("Helvetica", 9)
-            canvas.setFillColor(colors.black)
-            canvas.drawCentredString(width / 2, 15, str(doc.page))
+    # =========================
+    # PAGE NUMBER (BOTTOM CENTER)
+    # =========================
+    canvas.setFont("Helvetica", 10)
+    canvas.setFillColor(colors.black)
+    canvas.drawCentredString(width / 2, 20, str(doc.page))
 
         # =========================
         # PAGE 1 — COVER PAGE
