@@ -11,6 +11,27 @@ def safe_float(val):
     except:
         return 0.0
 
+
+def clean_text(value):
+    if value is None:
+        return ""
+
+    if isinstance(value, list):
+        return ", ".join([str(v) for v in value])
+
+    if isinstance(value, dict):
+        return str(value)
+
+    if not isinstance(value, str):
+        value = str(value)
+
+    value = value.replace("\xa0", " ")
+    value = value.replace("&", "&amp;")
+    value = value.replace("<", "&lt;")
+    value = value.replace(">", "&gt;")
+
+    return value.strip()
+
 # =========================
 # CONFIG
 # =========================
@@ -1946,29 +1967,6 @@ elif section == "Risk Appraisal":
         st.warning("⚠️ MEDIUM RISK")
     else:
         st.success("✅ LOW RISK")
-
-# =========================
-# HELPERS
-# =========================
-def clean_text(value):
-    if value is None:
-        return ""
-
-    if isinstance(value, list):
-        return ", ".join([str(v) for v in value])
-
-    if isinstance(value, dict):
-        return str(value)
-
-    if not isinstance(value, str):
-        value = str(value)
-
-    value = value.replace("\xa0", " ")
-    value = value.replace("&", "&amp;")
-    value = value.replace("<", "&lt;")
-    value = value.replace(">", "&gt;")
-
-    return value.strip()
 
 # SUBMIT (FINAL PROFESSIONAL) 
 # =========================
