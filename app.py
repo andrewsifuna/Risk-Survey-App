@@ -2001,7 +2001,7 @@ elif section == "Submit":
         # =========================
         # HEADER + FOOTER + WATERMARK
         # =========================
-        def add_layout(canvas, doc):
+def add_layout(canvas, doc):
     width, height = doc.pagesize
 
     # =========================
