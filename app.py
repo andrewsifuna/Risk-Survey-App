@@ -2050,9 +2050,10 @@ elif section == "Submit":
             "<b>CONTENTS</b>",
             ParagraphStyle(
                 name="toc_title",
-                alignment=1,   # center
+                alignment=0,  # 👈 LEFT ALIGN
                 fontSize=18,
-                spaceAfter=25
+                textColor=colors.HexColor("#D35400"),  # 👈 PROFESSIONAL ORANGE
+                spaceAfter=20
             )
         ))
 
@@ -2080,11 +2081,10 @@ elif section == "Submit":
                 ParagraphStyle(
                     name="toc_item",
                     fontSize=12,
-                    alignment=0,  # 👈 LEFT ALIGN (important)
-                    textColor=colors.HexColor("#D35400"), 
-                    leftIndent=40,   # slight indent like Word
-                    spaceAfter=10,
-                    leading=14
+                    alignment=0,
+                    textColor=colors.black,  # 👈 KEEP BLACK
+                    leftIndent=40,
+                    spaceAfter=10
                 )
             ))
 
