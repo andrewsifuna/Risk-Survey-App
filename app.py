@@ -1999,6 +1999,10 @@ elif section == "Submit":
         story.append(Spacer(1, 120))
 
         # DATE (AUTO)
+        from datetime import datetime
+        
+        today = datetime.now().strftime("%d %B %Y, %H:%M")
+        
         story.append(
             Paragraph(
                 f"<b>{today}</b>", ParagraphStyle(name="t5", alignment=1, fontSize=14)
