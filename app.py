@@ -5,6 +5,16 @@ import requests
 import streamlit.components.v1 as components
 from datetime import datetime
 from geopy.distance import geodesic
+from reportlab.platypus.tableofcontents import TableOfContents
+from reportlab.platypus import SimpleDocTemplate, Paragraph 
+
+class MyDocTemplate(SimpleDocTemplate):
+    def afterFlowable(self, flowable):
+        if isinstance(flowable, Paragraph):
+            text = flowable.getPlainText()
+
+            if text.startswith(tuple(f"{i}." for i in range(1, 14))):
+                self.notify('TOCEntry', (0, text, self.page))
 
 
 def safe_float(val):
@@ -1953,6 +1963,9 @@ elif section == "Submit":
             alignment=0,  # left aligned
         )
         story = []
+        
+        def add_bookmark(canvas, doc, key):
+            canvas.bookmarkPage(key)
 
         # =========================
         # PAGE 1 — COVER PAGE (FINAL CLEAN)
@@ -2010,41 +2023,56 @@ elif section == "Submit":
         )
 
         story.append(PageBreak())
+        
+        toc = TableOfContents()
 
-        # =========================
-        # PAGE 2 — CONTENTS
-        # =========================
-        contents = [
-            "1. EXECUTIVE SUMMARY",
-            "2. CONTROL & CONTACT DETAILS",
-            "3. INTRODUCTION",
-            "4. BACKGROUND INFORMATION",
-            "5. RISK IMPROVEMENT RECOMMENDATIONS",
-            "6. RISK SCORING MATRIX",
-            "7. INSURANCE PROGRAM REVIEW",
-            "8. PROCESS DESCRIPTION & HAZARDS ANALYSIS",
-            "9. FIRE & EXPLOSION RISK ASSESSMENT",
-            "10. SECURITY ARRANGEMENTS",
-            "11. UTILITIES & SERVICES",
-            "12. LOSS POTENTIAL PML",
-            "13. UNDERWRITING REMARKS",
+        toc.levelStyles = [
+            ParagraphStyle(
+                name='TOCHeading1',
+                fontSize=12,
+                leftIndent=20,
+                firstLineIndent=-10,
+                spaceBefore=5,
+                leading=14
+            )
         ]
 
-        for c in contents:
-            story.append(Paragraph(c, normal))
-            story.append(Spacer(1, 8))
+        # =========================
+        # =========================
+    # PAGE 2 — PROFESSIONAL TOC
+    # =========================
 
-        story.append(PageBreak())
+    story.append(Spacer(1, 40))
+
+    story.append(Paragraph(
+        "<b>TABLE OF CONTENTS</b>",
+        ParagraphStyle(name="toc_title", alignment=1, fontSize=18)
+    ))
+
+    story.append(Spacer(1, 30))
+
+    story.append(toc)
+
+    story.append(PageBreak())
 
         # =========================
         # PAGE 3
         # =========================
-        story.append(Paragraph("1. EXECUTIVE SUMMARY", section_title))
+
+        # 1. EXECUTIVE SUMMARY
+        story.append(Paragraph(
+            '<a name="exec_summary"/><b>1. EXECUTIVE SUMMARY</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("summary", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("2. CONTROL & CONTACT DETAILS", section_title))
+        # 2. CONTROL & CONTACT DETAILS
+        story.append(Paragraph(
+            '<a name="control"/><b>2. CONTROL & CONTACT DETAILS</b>',
+            section_title
+        ))
 
         contact_data = [
             ["Insured", d.get("insured", "")],
@@ -2052,7 +2080,7 @@ elif section == "Submit":
             ["Nature of Business", d.get("business", "")],
             ["Employees", d.get("employees", "")],
             ["Utilities", d.get("utilities", "")],
-            ["Survey Conducted By", d.get("surveyors", "")],
+            ["Survey Conducted By", d.get("surveyors", "")]
         ]
 
         table = Table(contact_data, colWidths=[180, 300])
@@ -2061,20 +2089,34 @@ elif section == "Submit":
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("3. INTRODUCTION", section_title))
+        # 3. INTRODUCTION
+        story.append(Paragraph(
+            '<a name="intro"/><b>3. INTRODUCTION</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("intro", "")), normal))
 
         story.append(PageBreak())
 
         # =========================
+        # =========================
         # PAGE 4
         # =========================
-        story.append(Paragraph("4. BACKGROUND INFORMATION", section_title))
+
+        # 4. BACKGROUND INFORMATION
+        story.append(Paragraph(
+            '<a name="background"/><b>4. BACKGROUND INFORMATION</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("background", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("5. RISK IMPROVEMENT RECOMMENDATIONS", section_title))
+        # 5. RISK IMPROVEMENT RECOMMENDATIONS
+        story.append(Paragraph(
+            '<a name="rir"/><b>5. RISK IMPROVEMENT RECOMMENDATIONS</b>',
+            section_title
+        ))
 
         rir = [["Recommendation", "Description", "Cost", "Timeline"]]
         for r in d.get("rir", []):
@@ -2086,15 +2128,25 @@ elif section == "Submit":
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("6. RISK SCORING MATRIX", section_title))
+        # 6. RISK SCORING MATRIX
+        story.append(Paragraph(
+            '<a name="scoring"/><b>6. RISK SCORING MATRIX</b>',
+            section_title
+        ))
         story.append(Paragraph("Risk Score = Likelihood × Severity", normal))
 
         story.append(PageBreak())
 
         # =========================
+        # =========================
         # PAGE 5
         # =========================
-        story.append(Paragraph("7. INSURANCE PROGRAM REVIEW", section_title))
+
+        # 7. INSURANCE PROGRAM REVIEW
+        story.append(Paragraph(
+            '<a name="insurance"/><b>7. INSURANCE PROGRAM REVIEW</b>',
+            section_title
+        ))
 
         ins = [["Class", "Coverage", "Risks", "Limits", "Extensions"]]
         for i in d.get("insurance", []):
@@ -2107,43 +2159,70 @@ elif section == "Submit":
         story.append(PageBreak())
 
         # =========================
+        # =========================
         # PAGE 6
         # =========================
-        story.append(
-            Paragraph("8. PROCESS DESCRIPTION & HAZARDS ANALYSIS", section_title)
-        )
+
+        # 8. PROCESS DESCRIPTION & HAZARDS ANALYSIS
+        story.append(Paragraph(
+            '<a name="process"/><b>8. PROCESS DESCRIPTION & HAZARDS ANALYSIS</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("process", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("9. FIRE & EXPLOSION RISK ASSESSMENT", section_title))
+        # 9. FIRE & EXPLOSION RISK ASSESSMENT
+        story.append(Paragraph(
+            '<a name="fire"/><b>9. FIRE & EXPLOSION RISK ASSESSMENT</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("fire", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("10. SECURITY ARRANGEMENTS", section_title))
+        # 10. SECURITY ARRANGEMENTS
+        story.append(Paragraph(
+            '<a name="security"/><b>10. SECURITY ARRANGEMENTS</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("security", "")), normal))
 
         story.append(PageBreak())
 
         # =========================
+        # =========================
         # PAGE 7
         # =========================
-        story.append(Paragraph("11. UTILITIES & SERVICES", section_title))
+
+        # 11. UTILITIES & SERVICES
+        story.append(Paragraph(
+            '<a name="utilities"/><b>11. UTILITIES & SERVICES</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("utilities", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("12. LOSS POTENTIAL PML", section_title))
+        # 12. LOSS POTENTIAL PML
+        story.append(Paragraph(
+            '<a name="pml"/><b>12. LOSS POTENTIAL PML</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("pml", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("13. UNDERWRITING REMARKS", section_title))
+        # 13. UNDERWRITING REMARKS
+        story.append(Paragraph(
+            '<a name="remarks"/><b>13. UNDERWRITING REMARKS</b>',
+            section_title
+        ))
         story.append(Paragraph(clean_text(d.get("remarks", "")), normal))
 
         story.append(Spacer(1, 40))
 
+        # SIGN OFF
         story.append(Paragraph("<b>Report By: Boniface Ondara</b>", normal))
         story.append(Paragraph("Risk Surveyor", normal))
         story.append(Paragraph("Equity General Insurance Kenya Limited", normal))
