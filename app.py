@@ -1969,8 +1969,8 @@ def clean_text(value):
 
 # SUBMIT (FINAL PROFESSIONAL) 
 # =========================
-
-elif section == "Submit":
+    
+    elif section == "Submit":
 
     st.header("Generate Final Equity Risk Survey Report")
 
