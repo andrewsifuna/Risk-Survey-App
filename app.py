@@ -2044,85 +2044,51 @@ elif section == "Submit":
             alignment=0  # left aligned
         )
         story = []
-
+        
         # =========================
-        # PAGE 1 — COVER PAGE
-        # =========================
-        # =========================
-        # PAGE 1 — COVER PAGE (EXACT MATCH)
+        # PAGE 1 — COVER PAGE (FINAL CLEAN)
         # =========================
 
-        story.append(Spacer(1, 30))
-
-        # LOGO (TOP LEFT)
-        story.append(Image("equity_logo.png", width=140, height=60))
-
-        story.append(Spacer(1, 20))
+        story.append(Spacer(1, 80))
 
         # TITLE
         story.append(Paragraph(
             "<b>RISK SURVEY REPORT</b>",
-            ParagraphStyle(name="t1", alignment=1, fontSize=18)
+            ParagraphStyle(name="title_center", alignment=1, fontSize=18)
         ))
 
+        # LINE (NOT BRIGHT BLUE — PROFESSIONAL COLOR)
+        line = Table([[""]], colWidths=[450])
+        line.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#7A8FA6")),
+        ]))
         story.append(Spacer(1, 10))
+        story.append(line)
 
-        # BLUE LINE
-        story.append(Table(
-            [[""]],
-            colWidths=[450],
-            rowHeights=[2],
-            style=[("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#2E64FE"))]
-        ))
+        # SPACE
+        story.append(Spacer(1, 60))
 
-        story.append(Spacer(1, 40))
-
-        # COVER PHOTO TEXT
+        # COVER TEXT
         story.append(Paragraph("<b>UPON</b>", ParagraphStyle(name="t2", alignment=1, fontSize=14)))
         story.append(Paragraph("<b>COVER PHOTO</b>", ParagraphStyle(name="t3", alignment=1, fontSize=14)))
 
-        story.append(Spacer(1, 50))
+        # SPACE
+        story.append(Spacer(1, 100))
 
         # CLIENT NAME
-        story.append(Paragraph("<b>CLIENT NAME</b>", ParagraphStyle(name="t4", alignment=1, fontSize=16)))
+        story.append(Paragraph("<b>CLIENT NAME:</b>", ParagraphStyle(name="t4", alignment=1, fontSize=16)))
 
-        story.append(Spacer(1, 10))
+        # SPACE
+        story.append(Spacer(1, 120))
 
-        story.append(Paragraph("<b>Example 👉 (</b>", ParagraphStyle(name="t5", alignment=1, fontSize=14)))
-
-        story.append(Spacer(1, 10))
-
-        story.append(Paragraph("<b>– LIMBUA GROUP – GITHURE –</b>", ParagraphStyle(name="t6", alignment=1, fontSize=14)))
-
-        story.append(Spacer(1, 10))
-
-        story.append(Paragraph("<b>MACADAMIA PROCESSING FACILITY</b>", ParagraphStyle(name="t7", alignment=1, fontSize=12)))
-        story.append(Paragraph("<b>GITHURE, KUTUS KIRINYAGA COUNTY</b>", ParagraphStyle(name="t8", alignment=1, fontSize=12)))
-
-        story.append(Spacer(1, 40))
-
-        # DATE
-        story.append(Paragraph("<b>DATE</b>", ParagraphStyle(name="t9", alignment=1, fontSize=14)))
-
-        story.append(Spacer(1, 10))
-
-        story.append(Paragraph("Example see below", ParagraphStyle(name="t10", alignment=1, fontSize=12)))
-
-        story.append(Spacer(1, 10))
-
-        story.append(Paragraph("👇", ParagraphStyle(name="t11", alignment=1, fontSize=14)))
-
-        story.append(Spacer(1, 20))
-
+        # DATE (AUTO)
+        today = datetime.now().strftime("%d %B %Y").upper()
         story.append(Paragraph(
-            "<b>26<sup>TH</sup> MARCH 2026</b>",
-            ParagraphStyle(name="t12", alignment=1, fontSize=14)
+            f"<b>{today}</b>",
+            ParagraphStyle(name="t5", alignment=1, fontSize=14)
         ))
 
         story.append(PageBreak())
-        
-        styles = getSampleStyleSheet()
-        normal = styles["Normal"]
 
         # =========================
         # PAGE 2 — CONTENTS
