@@ -1988,7 +1988,14 @@ elif section == "Submit":
             width, height = doc.pagesize
 
             # LOGO
-            canvas.drawImage("equity_logo.png", 40, height - 80, width=120, height=50)
+            canvas.drawImage(
+                "equity_logo.png",
+                40,
+                height - 70,
+                width=110,
+                height=45,
+                mask='auto'
+            )
 
             # WATERMARK
             canvas.saveState()
@@ -2001,7 +2008,6 @@ elif section == "Submit":
             # DATE
             today = datetime.now().strftime("%d %B %Y").upper()
             canvas.setFont("Helvetica-Bold", 12)
-            canvas.drawCentredString(width / 2, 95, today)
 
             # FOOTER TEXT
             canvas.setFont("Helvetica-Bold", 11)
@@ -2057,16 +2063,8 @@ elif section == "Submit":
             ParagraphStyle(name="title_center", alignment=1, fontSize=18)
         ))
 
-        # LINE (NOT BRIGHT BLUE — PROFESSIONAL COLOR)
-        line = Table([[""]], colWidths=[450])
-        line.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#7A8FA6")),
-        ]))
-        story.append(Spacer(1, 10))
-        story.append(line)
-
         # SPACE
-        story.append(Spacer(1, 60))
+        story.append(Spacer(1, 25))
 
         # COVER TEXT
         story.append(Paragraph("<b>UPON</b>", ParagraphStyle(name="t2", alignment=1, fontSize=14)))
@@ -2082,7 +2080,6 @@ elif section == "Submit":
         story.append(Spacer(1, 120))
 
         # DATE (AUTO)
-        today = datetime.now().strftime("%d %B %Y").upper()
         story.append(Paragraph(
             f"<b>{today}</b>",
             ParagraphStyle(name="t5", alignment=1, fontSize=14)
