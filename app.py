@@ -1947,6 +1947,9 @@ elif section == "Risk Appraisal":
     else:
         st.success("✅ LOW RISK")
 
+# =========================
+# HELPERS
+# =========================
 def clean_text(value):
     if value is None:
         return ""
