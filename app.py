@@ -3,6 +3,7 @@ import time
 import math   
 import requests
 import streamlit.components.v1 as components
+from datetime import datetime
 from geopy.distance import geodesic
 
 def safe_float(val):
@@ -1983,58 +1984,56 @@ elif section == "Submit":
         from reportlab.lib.units import inch
         from reportlab.pdfgen import canvas
 
-        # =========================
-        # BRAND COLORS (EQUITY)
-        # =========================
-        EQUITY_RED = colors.HexColor("#A6192E")
-        LIGHT_GREY = colors.HexColor("#E6E6E6")
-
-        doc = SimpleDocTemplate("final_equity_report.pdf")
-        styles = getSampleStyleSheet()
-
-        title = ParagraphStyle(name="title", fontSize=18, alignment=1, spaceAfter=20)
-        section_title = ParagraphStyle(name="section", fontSize=14, textColor=EQUITY_RED, spaceAfter=10)
-        normal = styles["Normal"]
-
-        story = []
-
-        # =========================
-        # HEADER + FOOTER + WATERMARK
-        # =========================
         def add_layout(canvas, doc):
             width, height = doc.pagesize
-            
-            # =========================
-            # WATERMARK (CENTER)
-            # =========================
+
+            # LOGO
+            canvas.drawImage("equity_logo.png", 40, height - 80, width=120, height=50)
+
+            # WATERMARK
             canvas.saveState()
             canvas.setFont("Helvetica-Bold", 100)
             canvas.setFillColor(colors.HexColor("#A6192E"))
             canvas.setFillAlpha(0.05)
             canvas.drawCentredString(width / 2, height / 2, "EGIK")
             canvas.restoreState()
-            
-            # =========================
-            # FOOTER TEXT (LOWER — MATCH IMAGE)
-            # =========================
-            
+
+            # DATE
+            today = datetime.now().strftime("%d %B %Y").upper()
+            canvas.setFont("Helvetica-Bold", 12)
+            canvas.drawCentredString(width / 2, 95, today)
+
+            # FOOTER TEXT
             canvas.setFont("Helvetica-Bold", 11)
             canvas.setFillColor(colors.grey)
-            canvas.drawCentredString(width / 2, 55, "EQUITY GENERAL INSURANCE (KENYA) LTD.")
-            
+            canvas.drawCentredString(width / 2, 70, "EQUITY GENERAL INSURANCE (KENYA) LTD.")
+
             canvas.setFont("Helvetica", 10)
             canvas.drawCentredString(
                 width / 2,
-                40,
+                55,
                 "Equity General Insurance (Kenya) Ltd. is regulated by Insurance Regulatory Authority"
             )
-            
-            # =========================
-            # PAGE NUMBER (BOTTOM CENTER)
-            # =========================
+
+            # FOOTER LINE
+            canvas.setFillColor(colors.HexColor("#B76E79"))
+            canvas.rect(40, 35, width * 0.5, 4, fill=1)
+
+            canvas.setFillColor(colors.grey)
+            canvas.rect(40 + width * 0.5, 35, width * 0.4, 4, fill=1)
+
+            # PAGE NUMBER
             canvas.setFont("Helvetica", 10)
             canvas.setFillColor(colors.black)
             canvas.drawCentredString(width / 2, 20, str(doc.page))
+
+        # =========================
+        # CONTINUE YOUR CODE
+        # =========================
+
+        doc = SimpleDocTemplate("final_equity_report.pdf")
+        styles = getSampleStyleSheet()
+        story = []
 
         # =========================
         # PAGE 1 — COVER PAGE
