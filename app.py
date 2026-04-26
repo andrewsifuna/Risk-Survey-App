@@ -2110,6 +2110,9 @@ elif section == "Submit":
         ))
 
         story.append(PageBreak())
+        
+        styles = getSampleStyleSheet()
+        normal = styles["Normal"]
 
         # =========================
         # PAGE 2 — CONTENTS
