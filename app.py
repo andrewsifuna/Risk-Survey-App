@@ -2042,18 +2042,28 @@ elif section == "Submit":
         # PAGE 2 — PROFESSIONAL TOC
         # =========================
 
-        story.append(Spacer(1, 40))
+        contents = [
+            "1. EXECUTIVE SUMMARY",
+            "2. CONTROL & CONTACT DETAILS",
+            "3. INTRODUCTION",
+            "4. BACKGROUND INFORMATION",
+            "5. RISK IMPROVEMENT RECOMMENDATIONS",
+            "6. RISK SCORING MATRIX",
+            "7. INSURANCE PROGRAM REVIEW",
+            "8. PROCESS DESCRIPTION & HAZARDS ANALYSIS",
+            "9. FIRE & EXPLOSION RISK ASSESSMENT",
+            "10. SECURITY ARRANGEMENTS",
+            "11. UTILITIES & SERVICES",
+            "12. LOSS POTENTIAL PML",
+            "13. UNDERWRITING REMARKS",
+        ]
 
-        story.append(Paragraph(
-            "<b>TABLE OF CONTENTS</b>",
-            ParagraphStyle(name="toc_title", alignment=1, fontSize=18)
-        ))
-
-        story.append(Spacer(1, 30))
-
-        story.append(toc)
+        for c in contents:
+            story.append(Paragraph(c, normal))
+            story.append(Spacer(1, 8))
 
         story.append(PageBreak())
+
 
         # =========================
         # PAGE 3
