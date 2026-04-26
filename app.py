@@ -1947,6 +1947,29 @@ elif section == "Risk Appraisal":
     else:
         st.success("✅ LOW RISK")
 
+def clean_text(value):
+    if value is None:
+        return ""
+
+    if isinstance(value, list):
+        return ", ".join([str(v) for v in value])
+
+    if isinstance(value, dict):
+        return str(value)
+
+    if not isinstance(value, str):
+        value = str(value)
+
+    value = value.replace("\xa0", " ")
+    value = value.replace("&", "&amp;")
+    value = value.replace("<", "&lt;")
+    value = value.replace(">", "&gt;")
+
+    return value.strip()
+
+# SUBMIT (FINAL PROFESSIONAL) 
+# =========================
+
 elif section == "Submit":
 
     st.header("Generate Final Equity Risk Survey Report")
