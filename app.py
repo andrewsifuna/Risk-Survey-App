@@ -2039,21 +2039,21 @@ elif section == "Submit":
 
         # =========================
         # =========================
-    # PAGE 2 — PROFESSIONAL TOC
-    # =========================
+        # PAGE 2 — PROFESSIONAL TOC
+        # =========================
 
-    story.append(Spacer(1, 40))
+        story.append(Spacer(1, 40))
 
-    story.append(Paragraph(
-        "<b>TABLE OF CONTENTS</b>",
-        ParagraphStyle(name="toc_title", alignment=1, fontSize=18)
-    ))
+        story.append(Paragraph(
+            "<b>TABLE OF CONTENTS</b>",
+            ParagraphStyle(name="toc_title", alignment=1, fontSize=18)
+        ))
 
-    story.append(Spacer(1, 30))
+        story.append(Spacer(1, 30))
 
-    story.append(toc)
+        story.append(toc)
 
-    story.append(PageBreak())
+        story.append(PageBreak())
 
         # =========================
         # PAGE 3
