@@ -2037,11 +2037,26 @@ elif section == "Submit":
             )
         ]
 
+
         # =========================
         # =========================
-        # PAGE 2 — PROFESSIONAL TOC
+        # PAGE 2 — CONTENTS (FINAL STATIC)
         # =========================
 
+        story.append(Spacer(1, 50))
+
+        # TITLE (MATCHES WORD STYLE)
+        story.append(Paragraph(
+            "<b>CONTENTS</b>",
+            ParagraphStyle(
+                name="toc_title",
+                alignment=1,   # center
+                fontSize=18,
+                spaceAfter=25
+            )
+        ))
+
+        # CONTENT LIST
         contents = [
             "1. EXECUTIVE SUMMARY",
             "2. CONTROL & CONTACT DETAILS",
@@ -2058,9 +2073,18 @@ elif section == "Submit":
             "13. UNDERWRITING REMARKS",
         ]
 
+        # CLEAN WORD-LIKE FORMATTING
         for c in contents:
-            story.append(Paragraph(c, normal))
-            story.append(Spacer(1, 8))
+            story.append(Paragraph(
+                c,
+                ParagraphStyle(
+                    name="toc_item",
+                    fontSize=12,
+                    leftIndent=60,     # 👈 key for Word look
+                    spaceAfter=10,
+                    leading=14
+                )
+            ))
 
         story.append(PageBreak())
 
