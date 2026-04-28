@@ -2033,11 +2033,11 @@ elif section == "Submit":
         toc.levelStyles = [
             ParagraphStyle(
                 name='TOCHeading1',
-                fontSize=12,
+                fontSize=10.5,
                 leftIndent=20,
                 firstLineIndent=-10,
                 spaceBefore=5,
-                leading=14
+                leading=12
             )
         ]
 
@@ -2046,13 +2046,13 @@ elif section == "Submit":
         
         toc_style = ParagraphStyle(
             name="toc_item",
-            fontSize=12,
-            leading=14,
+            fontSize=10.5,
+            leading=12,
             leftIndent=40,
             rightIndent=20,
             firstLineIndent=0,
             alignment=TA_LEFT,
-            spaceAfter=6,
+            spaceAfter=2,
             
         )
         
@@ -2070,7 +2070,7 @@ elif section == "Submit":
             leftIndent=40,
             rightIndent=20,
             alignment=TA_LEFT,
-            spaceAfter=6,
+            spaceAfter=2,
         )
         
         toc_title_style = ParagraphStyle(
@@ -2082,12 +2082,12 @@ elif section == "Submit":
             spaceAfter=20,
         )
 
-        story.append(Spacer(1, 50))
+        story.append(Spacer(1, 25))
         story.append(Paragraph("<b>CONTENTS</b>", toc_title_style))
 
         # TITLE (MATCHES WORD STYLE)
         def toc_line(title, page):
-            dots = "." * (90 - len(title))   # adjust 90 if needed
+            dots = "." * max(10, 85 - len(title))   # adjust 90 if needed
             return Paragraph(f"{title} {dots} {page}", toc_style)
 
         # CONTENT LIST
