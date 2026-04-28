@@ -2062,7 +2062,6 @@ elif section == "Submit":
         # =========================
 
         from reportlab.lib.enums import TA_LEFT, TA_RIGHT
-        from reportlab.lib.styles import TabStop
 
 
         toc_style = ParagraphStyle(
