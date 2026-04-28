@@ -2062,7 +2062,7 @@ elif section == "Submit":
 
         from reportlab.lib.enums import TA_LEFT
 
-        
+        # 1. TITLE STYLE
         toc_title_style = ParagraphStyle(
             name="toc_title",
             fontSize=18,
@@ -2074,9 +2074,17 @@ elif section == "Submit":
 
         story.append(Spacer(1, 25))
         story.append(Paragraph("<b>CONTENTS</b>", toc_title_style))
-
         
-       
+        # 2. DEFINE toc_style HERE
+        toc_style = ParagraphStyle(
+            name="toc_item",
+            fontSize=10.5,
+            leading=12,
+            leftIndent=20,
+            alignment=TA_LEFT,
+            spaceAfter=4,
+            wordWrap='CJK'
+        )
 
         # CONTENT LIST
         contents = [
@@ -2084,29 +2092,34 @@ elif section == "Submit":
             ("2. SCOPE & LIMITATIONS", 4),
             ("3. CONTROL & CONTACT DETAILS", 4),
             ("4. SITE DESCRIPTION & LOCATION", 5),
-            ("5. OCCUPANCY & OPERATIONS", 6),
-            ("6. BACKGROUND INFORMATION", 7),
-            ("7. RISK IMPROVEMENT RECOMMENDATIONS", 8),
-            ("8. PROCESS DESCRIPTION & HAZARDS", 9),
-            ("9. FIRE PROTECTION SYSTEMS", 10),
-            ("10. FIRE & EXPLOSION RISK", 11),
-            ("11. ELECTRICAL RISK", 12),
-            ("12. SECURITY", 12),
-            ("13. UTILITIES", 13),
-            ("14. MAINTENANCE & HOUSEKEEPING", 13),
-            ("15. EMERGENCY PREPAREDNESS", 14),
-            ("16. RISK SCORING MATRIX", 15),
-            ("17. OVERALL RISK GRADING", 16),
-            ("18. LOSS POTENTIAL (PML)", 17),
-            ("19. INSURANCE REVIEW", 18),
-            ("20. UNDERWRITING REMARKS", 19),
-            ("21. PHOTO APPENDIX", 20),
+            ("5. OCCUPANCY & OPERATIONS", 5),
+            ("6. BACKGROUND INFORMATION", 6),
+            ("7. RISK IMPROVEMENT RECOMMENDATIONS", 6),
+            ("8. PROCESS DESCRIPTION & HAZARDS", 7),
+            ("9. FIRE PROTECTION SYSTEMS", 7),
+            ("10. FIRE & EXPLOSION RISK", 8),
+            ("11. ELECTRICAL RISK", 8),
+            ("12. SECURITY", 9),
+            ("13. UTILITIES", 9),
+            ("14. MAINTENANCE & HOUSEKEEPING", 10),
+            ("15. EMERGENCY PREPAREDNESS", 10),
+            ("16. RISK SCORING MATRIX", 11),
+            ("17. OVERALL RISK GRADING", 11),
+            ("18. LOSS POTENTIAL (PML)", 12),
+            ("19. INSURANCE REVIEW", 12),
+            ("20. UNDERWRITING REMARKS", 13),
+            ("21. PHOTO APPENDIX", 14),
         ]
+        
+        
         # THEN BUILD TABLE
         table_data = []
 
+        max_chars = 60  # controls alignment column
+
         for title, page in contents:
-            dots = '.' * max(5, 90 - len(title))  # adjust spacing here
+            dots = '.' * max(5, max_chars - len(title))
+            
             table_data.append([
                 Paragraph(f"{title} {dots}", toc_style),
                 Paragraph(str(page), toc_style)
@@ -2124,7 +2137,6 @@ elif section == "Submit":
         ]))
         
         story.append(toc_table)
-
         story.append(PageBreak())
 
 
