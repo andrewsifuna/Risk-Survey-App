@@ -2263,7 +2263,7 @@ elif section == "Submit":
         # CREATE TABLE
         recommendation_table = Table(
             recommendation_table_data,
-            colWidths=[110, 230, 80, 110]  # adjust proportions
+            colWidths=[110, 230, 80, 110],  # adjust proportions
             rowHeights=[18, 20, 20, 20, 20]  # header + 4 rows
         )
 
