@@ -2089,7 +2089,7 @@ elif section == "Submit":
                 c,
                 ParagraphStyle(
                     name="toc_item",
-                    fontSize=12,
+                    fontSize=11,
                     alignment=0,
                     textColor=colors.black,
                     leftIndent=40,
