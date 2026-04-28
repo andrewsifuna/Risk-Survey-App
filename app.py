@@ -2063,13 +2063,18 @@ elif section == "Submit":
         # PAGE 2 — CONTENTS (FINAL STATIC)
         # =========================
 
-        toc_title_style = ParagraphStyle(
-            name="toc_title",
-            alignment=TA_LEFT,
-            fontSize=18,
-            textColor=colors.HexColor("#D35400"),
+        from reportlab.platypus import TabStop
+        from reportlab.lib.enums import TA_LEFT, TA_RIGHT
+
+        toc_style = ParagraphStyle(
+            name="toc_item",
+            fontSize=12,
+            leading=14,
             leftIndent=40,
-            spaceAfter=20
+            rightIndent=20,
+            alignment=TA_LEFT,
+            spaceAfter=6,
+            tabs=[TabStop(540, alignment=TA_RIGHT, leader='.')]
         )
 
         story.append(Spacer(1, 50))
