@@ -2352,9 +2352,79 @@ elif section == "Submit":
         # PAGE 11 — SCORING + GRADING
         # =========================
         story.append(Paragraph("16. RISK SCORING MATRIX", section_title))
-        story.append(Paragraph("Risk Score = Likelihood × Severity", normal))
 
         story.append(Spacer(1, 20))
+        
+        story.append(Paragraph("Risk Rating Scale", section_title))
+
+        story.append(Spacer(1, 8))
+
+        story.append(Paragraph("Likelihood (L). 1 = Rare, 2 = Unlikely, 3 = Possible, 4 = Likely, 5 = Almost Certain", normal))
+        story.append(Paragraph("Severity (S). 1 = Minor, 2 = Moderate, 3 = Significant, 4 = Major, 5 = Catastrophic", normal))
+        story.append(Paragraph("Risk Score = L × S (Max = 25)", normal))
+        
+        
+        story.append(Spacer(1, 12))
+        story.append(Paragraph("Interpretation", section_title))
+
+        story.append(Spacer(1, 8))
+        
+        interpretation_data = [
+            [Paragraph('<font color="#00B050">●</font>', normal), "1 – 6 Low Risk (Monitor)"],
+            [Paragraph('<font color="#FFC000">●</font>', normal), "7 – 12 Moderate Risk (Control Required)"],
+            [Paragraph('<font color="#ED7D31">●</font>', normal), "13 – 16 High Risk (Urgent Mitigation Required)"],
+            [Paragraph('<font color="#C00000">●</font>', normal), "17 – 25 Extreme Risk (Immediate Intervention Required)"],
+        ]
+
+        interpretation_table = Table(interpretation_data, colWidths=[20, 400])
+
+        interpretation_table.setStyle(TableStyle([
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('LEFTPADDING', (0,0), (-1,-1), 0),
+            ('RIGHTPADDING', (0,0), (-1,-1), 0),
+        ]))
+        
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph(
+            "Below is the risk scoring table constituting various risk scenarios:"
+            normal
+        ))
+        
+        risk_table_data = [
+            ["Risk Scenario", "Category", "L", "S", "Risk Score"],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+        ]
+        
+        risk_table = Table(
+            risk_table_data,
+            colWidths=[240, 110, 40, 40, 70]
+        )
+        
+        risk_table.setStyle(TableStyle([
+            # Grid
+            ('GRID', (0,0), (-1,-1), 0.75, colors.black),
+
+            # Header styling
+            ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#E6E6E6")),
+            ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+            ('ALIGN', (0,0), (-1,0), 'CENTER'),   # header
+            ('ALIGN', (2,1), (-1,-1), 'CENTER'),  # numeric columns only
+
+            # Padding
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 6),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+        ]))
+        
+        story.append(interpretation_table)
+        story.append(Spacer(1, 20))
+        story.append(risk_table)
 
         story.append(Paragraph("17. OVERALL RISK GRADING", section_title))
         story.append(Paragraph(clean_text(d.get("grading", "")), normal))
