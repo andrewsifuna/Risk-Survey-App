@@ -2054,9 +2054,8 @@ elif section == "Submit":
             firstLineIndent=0,
             alignment=TA_LEFT,
             spaceAfter=6,
-            tabs=[
-                (450, 'right', '.')  # 👈 THIS CREATES DOT LEADER + RIGHT ALIGN
-                ]
+            tabs=[(450, 'right', '.')  # 👈 THIS CREATES DOT LEADER + RIGHT ALIGN
+                  ]
         )
         
         # =========================
