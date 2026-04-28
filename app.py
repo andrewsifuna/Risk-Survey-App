@@ -2444,14 +2444,47 @@ elif section == "Submit":
         story.append(Spacer(1, 20))
 
         story.append(Paragraph("19. INSURANCE PROGRAM REVIEW", section_title))
+        insurance_table_data = [
+            ["Insurance Class", "Coverage Scope", "Key Risks Covered", "Limits", "Key Sub-Limits / Extensions"],
 
-        ins = [["Class", "Coverage", "Limits"]]
-        for i in d.get("insurance", []):
-            ins.append(i)
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+        ]
+        
+        insurance_table = Table(
+            insurance_table_data,
+            colWidths=[110, 110, 120, 90, 120],
+            rowHeights=[20] + [22]*5
+        )
+        
+        insurance_table.setStyle(TableStyle([
+            # Grid
+            ('GRID', (0,0), (-1,-1), 0.75, colors.black),
 
-        t = Table(ins)
-        t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 1, colors.black)]))
-        story.append(t)
+            # Header styling
+            ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#E6E6E6")),
+            ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+            ('ALIGN', (0,0), (-1,0), 'CENTER'),
+
+            # Body alignment
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+
+            # Padding (compact)
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+
+            # Font size (important for fit)
+            ('FONTSIZE', (0,0), (-1,-1), 9),
+        ]))
+
+        
+        story.append(Spacer(1, 12))
+        story.append(insurance_table)
 
         story.append(PageBreak())
 
