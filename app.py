@@ -12,6 +12,7 @@ from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
+from reportlab.platypus import Table, TableStyle
 
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
@@ -2074,10 +2075,8 @@ elif section == "Submit":
         story.append(Spacer(1, 25))
         story.append(Paragraph("<b>CONTENTS</b>", toc_title_style))
 
-        # TITLE (MATCHES WORD STYLE)
-        def toc_line(title, page):
-            dots = "." * max(5, 95 - len(title))   # adjust 90 if needed
-            return Paragraph(f"{title} {dots} {page}", toc_style)
+        
+       
 
         # CONTENT LIST
         contents = [
@@ -2103,10 +2102,28 @@ elif section == "Submit":
             ("20. UNDERWRITING REMARKS", 19),
             ("21. PHOTO APPENDIX", 20),
         ]
-        
-        for title, page in contents:
-            story.append(toc_line(title, page))
+        # THEN BUILD TABLE
+        table_data = []
 
+        for title, page in contents:
+            table_data.append([
+                Paragraph(title, toc_style),
+                Paragraph(str(page), toc_style)
+            ])
+
+        toc_table = Table(
+            table_data,
+            colWidths=[400, 50]
+        )
+
+        toc_table.setStyle(TableStyle([
+            ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ]))
 
         story.append(PageBreak())
 
