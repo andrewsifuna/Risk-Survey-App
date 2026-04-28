@@ -2106,12 +2106,13 @@ elif section == "Submit":
         table_data = []
 
         for title, page in contents:
+            dots = '.' * max(5, 90 - len(title))  # adjust spacing here
             table_data.append([
-                Paragraph(title, toc_style),
+                Paragraph(f"{title} {dots}", toc_style),
                 Paragraph(str(page), toc_style)
             ])
 
-        toc_table = Table( table_data,colWidths=[400, 50])
+        toc_table = Table( table_data,colWidths=[420, 60])
 
         toc_table.setStyle(TableStyle([
             ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
