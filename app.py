@@ -2092,10 +2092,7 @@ elif section == "Submit":
             spaceAfter=4,
             wordWrap='CJK',
 
-            # 🔥 THIS IS THE MAGIC
-            tabStops=[
-                TabStop(500, alignment=TA_RIGHT, leader='.')
-            ]
+           
         )
 
         # CONTENT LIST
@@ -2125,10 +2122,14 @@ elif section == "Submit":
         
         
         # THEN BUILD TABLE
+            
+        table_data = []
+        max_chars = 85  # adjust for spacing
+        
         for title, page in contents:
-            story.append(
-                Paragraph(f"{title}\t{page}", toc_style)
-            )
+            dots = '.' * max(5, max_chars - len(title))
+            line = f"{title} {dots} {page}"
+            story.append(Paragraph(line, toc_style))
             
         story.append(PageBreak())
 
