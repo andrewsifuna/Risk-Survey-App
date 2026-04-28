@@ -2093,30 +2093,28 @@ elif section == "Submit":
 
 
         # =========================
-        # PAGE 3
+        # PAGE 3 — EXECUTIVE SUMMARY
         # =========================
-
-        # 1. EXECUTIVE SUMMARY
-        story.append(Paragraph(
-            '<a name="exec_summary"/><b>1. EXECUTIVE SUMMARY</b>',
-            section_title
-        ))
+        story.append(Paragraph("1. EXECUTIVE SUMMARY", section_title))
         story.append(Paragraph(clean_text(d.get("summary", "")), normal))
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 4 — SCOPE & CONTACT
+        # =========================
+        story.append(Paragraph("2. SCOPE OF SURVEY & LIMITATIONS", section_title))
+        story.append(Paragraph(clean_text(d.get("scope", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        # 2. CONTROL & CONTACT DETAILS
-        story.append(Paragraph(
-            '<a name="control"/><b>2. CONTROL & CONTACT DETAILS</b>',
-            section_title
-        ))
+        story.append(Paragraph("3. CONTROL & CONTACT DETAILS", section_title))
 
         contact_data = [
             ["Insured", d.get("insured", "")],
             ["Location", d.get("location", "")],
             ["Nature of Business", d.get("business", "")],
             ["Employees", d.get("employees", "")],
-            ["Utilities", d.get("utilities", "")],
             ["Survey Conducted By", d.get("surveyors", "")]
         ]
 
@@ -2124,38 +2122,34 @@ elif section == "Submit":
         table.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 1, colors.black)]))
         story.append(table)
 
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 5 — SITE & OPERATIONS
+        # =========================
+        story.append(Paragraph("4. SITE DESCRIPTION & LOCATION", section_title))
+        story.append(Paragraph(clean_text(d.get("site", "")), normal))
+
         story.append(Spacer(1, 20))
 
-        # 3. INTRODUCTION
-        story.append(Paragraph(
-            '<a name="intro"/><b>3. INTRODUCTION</b>',
-            section_title
-        ))
-        story.append(Paragraph(clean_text(d.get("intro", "")), normal))
+        story.append(Paragraph("5. OCCUPANCY & OPERATIONS", section_title))
+        story.append(Paragraph(clean_text(d.get("operations", "")), normal))
 
         story.append(PageBreak())
 
-        # =========================
-        # =========================
-        # PAGE 4
-        # =========================
 
-        # 4. BACKGROUND INFORMATION
-        story.append(Paragraph(
-            '<a name="background"/><b>4. BACKGROUND INFORMATION</b>',
-            section_title
-        ))
+        # =========================
+        # PAGE 6 — BACKGROUND + RIR
+        # =========================
+        story.append(Paragraph("6. BACKGROUND INFORMATION", section_title))
         story.append(Paragraph(clean_text(d.get("background", "")), normal))
 
         story.append(Spacer(1, 20))
 
-        # 5. RISK IMPROVEMENT RECOMMENDATIONS
-        story.append(Paragraph(
-            '<a name="rir"/><b>5. RISK IMPROVEMENT RECOMMENDATIONS</b>',
-            section_title
-        ))
+        story.append(Paragraph("7. RISK IMPROVEMENT RECOMMENDATIONS (SUMMARY)", section_title))
 
-        rir = [["Recommendation", "Description", "Cost", "Timeline"]]
+        rir = [["Recommendation", "Description", "Priority"]]
         for r in d.get("rir", []):
             rir.append(r)
 
@@ -2163,29 +2157,90 @@ elif section == "Submit":
         t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 1, colors.black)]))
         story.append(t)
 
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 7 — PROCESS & FIRE SYSTEMS
+        # =========================
+        story.append(Paragraph("8. PROCESS DESCRIPTION & HAZARDS ANALYSIS", section_title))
+        story.append(Paragraph(clean_text(d.get("process", "")), normal))
+
         story.append(Spacer(1, 20))
 
-        # 6. RISK SCORING MATRIX
-        story.append(Paragraph(
-            '<a name="scoring"/><b>6. RISK SCORING MATRIX</b>',
-            section_title
-        ))
-        story.append(Paragraph("Risk Score = Likelihood × Severity", normal))
+        story.append(Paragraph("9. FIRE PROTECTION SYSTEMS", section_title))
+        story.append(Paragraph(clean_text(d.get("fire_protection", "")), normal))
 
         story.append(PageBreak())
 
-        # =========================
-        # =========================
-        # PAGE 5
-        # =========================
 
-        # 7. INSURANCE PROGRAM REVIEW
-        story.append(Paragraph(
-            '<a name="insurance"/><b>7. INSURANCE PROGRAM REVIEW</b>',
-            section_title
-        ))
+        # =========================
+        # PAGE 8 — FIRE + ELECTRICAL
+        # =========================
+        story.append(Paragraph("10. FIRE & EXPLOSION RISK ASSESSMENT", section_title))
+        story.append(Paragraph(clean_text(d.get("fire", "")), normal))
 
-        ins = [["Class", "Coverage", "Risks", "Limits", "Extensions"]]
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("11. ELECTRICAL INSTALLATION & RISK", section_title))
+        story.append(Paragraph(clean_text(d.get("electrical", "")), normal))
+
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 9 — SECURITY + UTILITIES
+        # =========================
+        story.append(Paragraph("12. SECURITY ARRANGEMENTS", section_title))
+        story.append(Paragraph(clean_text(d.get("security", "")), normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("13. UTILITIES & SERVICES", section_title))
+        story.append(Paragraph(clean_text(d.get("utilities", "")), normal))
+
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 10 — MAINTENANCE + EMERGENCY
+        # =========================
+        story.append(Paragraph("14. MAINTENANCE & HOUSEKEEPING", section_title))
+        story.append(Paragraph(clean_text(d.get("maintenance", "")), normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("15. EMERGENCY RESPONSE & PREPAREDNESS", section_title))
+        story.append(Paragraph(clean_text(d.get("emergency", "")), normal))
+
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 11 — SCORING + GRADING
+        # =========================
+        story.append(Paragraph("16. RISK SCORING MATRIX", section_title))
+        story.append(Paragraph("Risk Score = Likelihood × Severity", normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("17. OVERALL RISK GRADING", section_title))
+        story.append(Paragraph(clean_text(d.get("grading", "")), normal))
+
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 12 — PML + INSURANCE
+        # =========================
+        story.append(Paragraph("18. LOSS POTENTIAL (PML)", section_title))
+        story.append(Paragraph(clean_text(d.get("pml", "")), normal))
+
+        story.append(Spacer(1, 20))
+
+        story.append(Paragraph("19. INSURANCE PROGRAM REVIEW", section_title))
+
+        ins = [["Class", "Coverage", "Limits"]]
         for i in d.get("insurance", []):
             ins.append(i)
 
@@ -2195,74 +2250,26 @@ elif section == "Submit":
 
         story.append(PageBreak())
 
-        # =========================
-        # =========================
-        # PAGE 6
-        # =========================
-
-        # 8. PROCESS DESCRIPTION & HAZARDS ANALYSIS
-        story.append(Paragraph(
-            '<a name="process"/><b>8. PROCESS DESCRIPTION & HAZARDS ANALYSIS</b>',
-            section_title
-        ))
-        story.append(Paragraph(clean_text(d.get("process", "")), normal))
-
-        story.append(Spacer(1, 20))
-
-        # 9. FIRE & EXPLOSION RISK ASSESSMENT
-        story.append(Paragraph(
-            '<a name="fire"/><b>9. FIRE & EXPLOSION RISK ASSESSMENT</b>',
-            section_title
-        ))
-        story.append(Paragraph(clean_text(d.get("fire", "")), normal))
-
-        story.append(Spacer(1, 20))
-
-        # 10. SECURITY ARRANGEMENTS
-        story.append(Paragraph(
-            '<a name="security"/><b>10. SECURITY ARRANGEMENTS</b>',
-            section_title
-        ))
-        story.append(Paragraph(clean_text(d.get("security", "")), normal))
-
-        story.append(PageBreak())
 
         # =========================
+        # PAGE 13 — FINAL
         # =========================
-        # PAGE 7
-        # =========================
-
-        # 11. UTILITIES & SERVICES
-        story.append(Paragraph(
-            '<a name="utilities"/><b>11. UTILITIES & SERVICES</b>',
-            section_title
-        ))
-        story.append(Paragraph(clean_text(d.get("utilities", "")), normal))
-
-        story.append(Spacer(1, 20))
-
-        # 12. LOSS POTENTIAL PML
-        story.append(Paragraph(
-            '<a name="pml"/><b>12. LOSS POTENTIAL PML</b>',
-            section_title
-        ))
-        story.append(Paragraph(clean_text(d.get("pml", "")), normal))
-
-        story.append(Spacer(1, 20))
-
-        # 13. UNDERWRITING REMARKS
-        story.append(Paragraph(
-            '<a name="remarks"/><b>13. UNDERWRITING REMARKS</b>',
-            section_title
-        ))
+        story.append(Paragraph("20. UNDERWRITING REMARKS", section_title))
         story.append(Paragraph(clean_text(d.get("remarks", "")), normal))
 
         story.append(Spacer(1, 40))
 
-        # SIGN OFF
         story.append(Paragraph("<b>Report By: Boniface Ondara</b>", normal))
         story.append(Paragraph("Risk Surveyor", normal))
-        story.append(Paragraph("Equity General Insurance Kenya Limited", normal))
+
+        story.append(PageBreak())
+
+
+        # =========================
+        # PAGE 14 — PHOTOS
+        # =========================
+        story.append(Paragraph("21. PHOTOGRAPHIC APPENDIX", section_title))
+        story.append(Paragraph("Insert site photographs here.", normal))
 
         # =========================
         # BUILD PDF
