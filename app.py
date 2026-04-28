@@ -2454,11 +2454,19 @@ elif section == "Submit":
             ["", "", "", "", ""],
         ]
         
+        available_width = doc.width
+
         insurance_table = Table(
             insurance_table_data,
-            colWidths=[110, 110, 120, 90, 120],
+            colWidths=[
+                available_width * 0.20,
+                available_width * 0.20,
+                available_width * 0.22,
+                available_width * 0.16,
+                available_width * 0.22,
+            ],
             rowHeights=[20] + [22]*5,
-            hAlign='LEFT' 
+            hAlign='LEFT'
         )
         
         insurance_table.setStyle(TableStyle([
