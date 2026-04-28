@@ -2263,7 +2263,8 @@ elif section == "Submit":
         # CREATE TABLE
         recommendation_table = Table(
             recommendation_table_data,
-            colWidths=[130, 240, 90, 130]  # adjust proportions
+            colWidths=[110, 230, 80, 110]  # adjust proportions
+            rowHeights=[18, 20, 20, 20, 20]  # header + 4 rows
         )
 
         # STYLE TABLE
@@ -2274,6 +2275,7 @@ elif section == "Submit":
             # Header styling
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#E6E6E6")),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0,0), (-1,0), 10),
 
             # Alignment
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
@@ -2282,8 +2284,9 @@ elif section == "Submit":
             # Padding
             ('LEFTPADDING', (0, 0), (-1, -1), 6),
             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-            ('TOPPADDING', (0, 0), (-1, -1), 8),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            
             
         ]))
 
