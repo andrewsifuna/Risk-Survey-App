@@ -2458,6 +2458,7 @@ elif section == "Submit":
             insurance_table_data,
             colWidths=[110, 110, 120, 90, 120],
             rowHeights=[20] + [22]*5
+            hAlign='LEFT' 
         )
         
         insurance_table.setStyle(TableStyle([
