@@ -1976,6 +1976,10 @@ elif section == "Submit":
             spaceBefore=10,
             alignment=0,  # left aligned
         )
+
+        # ✅ ADD HERE
+        SECTION_SPACING = 18
+        SUBSECTION_SPACING = 12
         story = []
         
         def add_bookmark(canvas, doc, key):
@@ -2177,22 +2181,43 @@ elif section == "Submit":
         # PAGE 4 — SCOPE & CONTACT
         # =========================
         story.append(Paragraph("2. SCOPE OF SURVEY & LIMITATIONS", section_title))
-        story.append(Paragraph(clean_text(d.get("scope", "")), normal))
+        story.append(Spacer(1, SECTION_SPACING))
 
-        story.append(Spacer(1, 20))
+        story.append(Paragraph(clean_text(d.get("scope", "")), normal))
+        story.append(Spacer(1, SECTION_SPACING))
 
         story.append(Paragraph("3. CONTROL & CONTACT DETAILS", section_title))
+        story.append(Spacer(1, SUBSECTION_SPACING))
 
         contact_data = [
             ["Insured", d.get("insured", "")],
             ["Location", d.get("location", "")],
             ["Nature of Business", d.get("business", "")],
-            ["Employees", d.get("employees", "")],
-            ["Survey Conducted By", d.get("surveyors", "")]
+            ["Number of Employees", d.get("employees", "")],
+            ["Utilities", d.get("utilities", "")],
+            ["Survey Conducted By", d.get("surveyors", "")],
+            ["Survey Type", d.get("survey_type", "")]
         ]
 
-        table = Table(contact_data, colWidths=[180, 300])
-        table.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 1, colors.black)]))
+        table = Table(contact_data, colWidths=[200, 300])
+        table.setStyle(TableStyle([
+            ('GRID', (0,0), (-1,-1), 0.75, colors.black),
+
+            # Header-like left column styling
+            ('BACKGROUND', (0,0), (0,-1), colors.lightgrey),
+            ('FONTNAME', (0,0), (0,-1), 'Helvetica-Bold'),
+
+            # Padding
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 6),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+
+            # Alignment
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            
+            ('ROWBACKGROUNDS', (0,0), (-1,-1), [colors.whitesmoke, colors.white]),
+        ]))
         story.append(table)
 
         story.append(PageBreak())
