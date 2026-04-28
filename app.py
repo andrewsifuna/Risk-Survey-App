@@ -2339,7 +2339,6 @@ elif section == "Submit":
         # PAGE 10 — MAINTENANCE + EMERGENCY
         # =========================
         story.append(Paragraph("14. MAINTENANCE & HOUSEKEEPING", section_title))
-        story.append(Paragraph(clean_text(d.get("maintenance", "")), normal))
 
         story.append(Spacer(1, 20))
 
