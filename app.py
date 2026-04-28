@@ -2121,6 +2121,8 @@ elif section == "Submit":
             ('TOPPADDING', (0, 0), (-1, -1), 2),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
+        
+        story.append(toc_table)
 
         story.append(PageBreak())
 
