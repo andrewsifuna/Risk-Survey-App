@@ -2272,7 +2272,7 @@ elif section == "Submit":
             ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
 
             # Header styling
-            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#E6E6E6"),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#E6E6E6")),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
 
             # Alignment
