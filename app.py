@@ -2444,8 +2444,14 @@ elif section == "Submit":
         story.append(Spacer(1, 20))
 
         story.append(Paragraph("19. INSURANCE PROGRAM REVIEW", section_title))
-        insurance_table_data = [
-            ["Insurance Class", "Coverage Scope", "Key Risks Covered", "Limits", "Key Sub-Limits / Extensions"],
+        insurance_table_data = [            
+            [
+            Paragraph("<b>Insurance Class</b>", normal),
+            Paragraph("<b>Coverage Scope</b>", normal),
+            Paragraph("<b>Key Risks Covered</b>", normal),
+            Paragraph("<b>Limits</b>", normal),
+            Paragraph("<b>Key Sub-Limits<br/>/ Extensions</b>", normal),
+            ],
 
             ["", "", "", "", ""],
             ["", "", "", "", ""],
@@ -2459,11 +2465,11 @@ elif section == "Submit":
         insurance_table = Table(
             insurance_table_data,
             colWidths=[
-                available_width * 0.20,
-                available_width * 0.20,
-                available_width * 0.22,
-                available_width * 0.16,
-                available_width * 0.22,
+                available_width * 0.18,   # Insurance Class
+                available_width * 0.20,   # Coverage Scope
+                available_width * 0.22,   # Key Risks Covered
+                available_width * 0.12,   # Limits (smaller)
+                available_width * 0.28,   # Key Sub-Limits / Extensions (bigger)
             ],
             rowHeights=[20] + [22]*5,
             hAlign='LEFT'
