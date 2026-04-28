@@ -13,8 +13,9 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.platypus import Table, TableStyle
-from reportlab.platypus import ParagraphStyle, TabStop
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.platypus.paragraph import TabStop
 
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
