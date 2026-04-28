@@ -2387,7 +2387,7 @@ elif section == "Submit":
         story.append(Spacer(1, 20))
 
         story.append(Paragraph(
-            "Below is the risk scoring table constituting various risk scenarios:"
+            "Below is the risk scoring table constituting various risk scenarios:",
             normal
         ))
         
