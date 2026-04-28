@@ -2054,8 +2054,7 @@ elif section == "Submit":
             firstLineIndent=0,
             alignment=TA_LEFT,
             spaceAfter=6,
-            tabs=[(450, 'right', '.')  # 👈 THIS CREATES DOT LEADER + RIGHT ALIGN
-                  ]
+            
         )
         
         # =========================
@@ -2074,7 +2073,6 @@ elif section == "Submit":
             rightIndent=20,
             alignment=TA_LEFT,
             spaceAfter=6,
-            tabs=[TabStop(540, alignment=TA_RIGHT, leader='.')]
         )
 
         story.append(Spacer(1, 50))
@@ -2082,7 +2080,8 @@ elif section == "Submit":
 
         # TITLE (MATCHES WORD STYLE)
         def toc_line(title, page):
-            return Paragraph(f"{title}<tab/>{page}", toc_style)
+            dots = "." * (90 - len(title))   # adjust 90 if needed
+            return Paragraph(f"{title} {dots} {page}", toc_style)
 
         # CONTENT LIST
         contents = [
