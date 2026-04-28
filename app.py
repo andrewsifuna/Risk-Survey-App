@@ -2111,10 +2111,7 @@ elif section == "Submit":
                 Paragraph(str(page), toc_style)
             ])
 
-        toc_table = Table(
-            table_data,
-            colWidths=[400, 50]
-        )
+        toc_table = Table( table_data,colWidths=[400, 50])
 
         toc_table.setStyle(TableStyle([
             ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
