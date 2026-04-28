@@ -2125,7 +2125,7 @@ elif section == "Submit":
         # THEN BUILD TABLE
         table_data = []
 
-        max_chars = 110  # controls how far dots extend
+        max_chars = 115  # controls how far dots extend
 
         for title, page in contents:
             dots = '.' * max(5, max_chars - len(title))
