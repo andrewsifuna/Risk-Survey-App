@@ -6,7 +6,9 @@ import streamlit.components.v1 as components
 from datetime import datetime
 from geopy.distance import geodesic
 from reportlab.platypus.tableofcontents import TableOfContents
-from reportlab.platypus import SimpleDocTemplate, Paragraph 
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.units import mm
+from reportlab.platypus import Paragraph 
 
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
@@ -2037,65 +2039,63 @@ elif section == "Submit":
             )
         ]
 
-
-        # =========================
+        from reportlab.lib.styles import ParagraphStyle
+        from reportlab.lib.enums import TA_LEFT
+        
+        toc_style = ParagraphStyle(
+            name="toc_item",
+            fontSize=12,
+            leading=14,
+            leftIndent=40,
+            rightIndent=20,
+            firstLineIndent=0,
+            alignment=TA_LEFT,
+            spaceAfter=6,
+            tabs=[
+                (450, 'right', '.')  # 👈 THIS CREATES DOT LEADER + RIGHT ALIGN
+                ]
+        )
+        
         # =========================
         # PAGE 2 — CONTENTS (FINAL STATIC)
         # =========================
 
         story.append(Spacer(1, 50))
+        
+        story.append(Paragraph("<b>CONTENTS</b>", toc_title_style))
 
         # TITLE (MATCHES WORD STYLE)
-        story.append(Paragraph(
-            "<b>CONTENTS</b>",
-            ParagraphStyle(
-                name="toc_title",
-                alignment=0,
-                fontSize=18,
-                textColor=colors.HexColor("#D35400"),
-                leftIndent=40,
-                spaceAfter=20
-            )
-        ))
+        def toc_line(title, page):
+            return Paragraph(f"{title}<tab/>{page}", toc_style)
 
         # CONTENT LIST
         contents = [
-            "1. EXECUTIVE SUMMARY",
-            "2. SCOPE & LIMITATIONS",
-            "3. CONTROL & CONTACT DETAILS",
-            "4. SITE DESCRIPTION & LOCATION",
-            "5. OCCUPANCY & OPERATIONS",
-            "6. BACKGROUND INFORMATION",
-            "7. RISK IMPROVEMENT RECOMMENDATIONS",
-            "8. PROCESS DESCRIPTION & HAZARDS",
-            "9. FIRE PROTECTION SYSTEMS",
-            "10. FIRE & EXPLOSION RISK",
-            "11. ELECTRICAL RISK",
-            "12. SECURITY",
-            "13. UTILITIES",
-            "14. MAINTENANCE & HOUSEKEEPING",
-            "15. EMERGENCY PREPAREDNESS",
-            "16. RISK SCORING MATRIX",
-            "17. OVERALL RISK GRADING",
-            "18. LOSS POTENTIAL (PML)",
-            "19. INSURANCE REVIEW",
-            "20. UNDERWRITING REMARKS",
-            "21. PHOTO APPENDIX",
+            ("1. EXECUTIVE SUMMARY", 3),
+            ("2. SCOPE & LIMITATIONS", 4),
+            ("3. CONTROL & CONTACT DETAILS", 4),
+            ("4. SITE DESCRIPTION & LOCATION", 5),
+            ("5. OCCUPANCY & OPERATIONS", 6),
+            ("6. BACKGROUND INFORMATION", 7),
+            ("7. RISK IMPROVEMENT RECOMMENDATIONS", 8),
+            ("8. PROCESS DESCRIPTION & HAZARDS", 9),
+            ("9. FIRE PROTECTION SYSTEMS", 10),
+            ("10. FIRE & EXPLOSION RISK", 11),
+            ("11. ELECTRICAL RISK", 12),
+            ("12. SECURITY", 12),
+            ("13. UTILITIES", 13),
+            ("14. MAINTENANCE & HOUSEKEEPING", 13),
+            ("15. EMERGENCY PREPAREDNESS", 14),
+            ("16. RISK SCORING MATRIX", 15),
+            ("17. OVERALL RISK GRADING", 16),
+            ("18. LOSS POTENTIAL (PML)", 17),
+            ("19. INSURANCE REVIEW", 18),
+            ("20. UNDERWRITING REMARKS", 19),
+            ("21. PHOTO APPENDIX", 20),
         ]
+        
+        for title, page in contents:
+            story.append(toc_line(title, page))
 
-        # CONTENT LIST (LEFT ALIGNED + ORANGE)
-        for c in contents:
-            story.append(Paragraph(
-                c,
-                ParagraphStyle(
-                    name="toc_item",
-                    fontSize=11,
-                    alignment=0,
-                    textColor=colors.black,
-                    leftIndent=40,
-                    spaceAfter=10
-                )
-            ))
 
         story.append(PageBreak())
 
