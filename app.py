@@ -8,7 +8,10 @@ from geopy.distance import geodesic
 from reportlab.platypus.tableofcontents import TableOfContents
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.units import mm
-from reportlab.platypus import Paragraph 
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_LEFT 
 
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
@@ -2060,8 +2063,16 @@ elif section == "Submit":
         # PAGE 2 — CONTENTS (FINAL STATIC)
         # =========================
 
+        toc_title_style = ParagraphStyle(
+            name="toc_title",
+            alignment=TA_LEFT,
+            fontSize=18,
+            textColor=colors.HexColor("#D35400"),
+            leftIndent=40,
+            spaceAfter=20
+        )
+
         story.append(Spacer(1, 50))
-        
         story.append(Paragraph("<b>CONTENTS</b>", toc_title_style))
 
         # TITLE (MATCHES WORD STYLE)
