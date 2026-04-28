@@ -2252,7 +2252,12 @@ elif section == "Submit":
 
         # TABLE HEADER + EMPTY ROWS
         recommendation_table_data = [
-            ["Recommendation", "Description of Action", "Cost Type", "Implementation Timeline"],
+            [
+                Paragraph("<b>Recommendation</b>", normal),
+                Paragraph("<b>Description of Action</b>", normal),
+                Paragraph("<b>Cost Type</b>", normal),
+                Paragraph("<b>Implementation<br/>Timeline</b>", normal),
+            ]
 
             ["", "", "", ""],
             ["", "", "", ""],
@@ -2263,8 +2268,14 @@ elif section == "Submit":
         # CREATE TABLE
         recommendation_table = Table(
             recommendation_table_data,
-            colWidths=[110, 230, 80, 110],  # adjust proportions
-            rowHeights=[18, 20, 20, 20, 20]  # header + 4 rows
+            colWidths=[
+            available_width * 0.22,  # Recommendation
+            available_width * 0.38,  # Description (biggest)
+            available_width * 0.15,  # Cost Type
+            available_width * 0.25,  # Implementation Timeline
+            ]
+            rowHeights=[20, 22, 22, 22, 22],  # header + 4 rows
+            hAlign='LEFT'
         )
 
         # STYLE TABLE
@@ -2278,8 +2289,8 @@ elif section == "Submit":
             ('FONTSIZE', (0,0), (-1,0), 10),
 
             # Alignment
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('ALIGN', (0,0), (-1,0), 'CENTER'),
+            ('VALIGN', (0,0), (-1,0), 'MIDDLE'),
 
             # Padding
             ('LEFTPADDING', (0, 0), (-1, -1), 6),
