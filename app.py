@@ -13,6 +13,8 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.platypus import Table, TableStyle
+from reportlab.platypus import ParagraphStyle, TabStop
+from reportlab.lib.enums import TA_LEFT, TA_RIGHT
 
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
@@ -2081,9 +2083,13 @@ elif section == "Submit":
             fontSize=10.5,
             leading=12,
             leftIndent=20,
-            alignment=TA_LEFT,
             spaceAfter=4,
-            wordWrap='CJK'
+            wordWrap='CJK',
+
+            # 🔥 THIS IS THE MAGIC
+            tabStops=[
+                TabStop(500, alignment=TA_RIGHT, leader='.')
+            ]
         )
 
         # CONTENT LIST
@@ -2113,30 +2119,11 @@ elif section == "Submit":
         
         
         # THEN BUILD TABLE
-        table_data = []
-
-        max_chars = 60  # controls alignment column
-
         for title, page in contents:
-            dots = '.' * max(5, max_chars - len(title))
+            story.append(
+                Paragraph(f"{title}\t{page}", toc_style)
+            )
             
-            table_data.append([
-                Paragraph(f"{title} {dots}", toc_style),
-                Paragraph(str(page), toc_style)
-            ])
-
-        toc_table = Table( table_data,colWidths=[420, 60])
-
-        toc_table.setStyle(TableStyle([
-            ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('LEFTPADDING', (0, 0), (-1, -1), 0),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-            ('TOPPADDING', (0, 0), (-1, -1), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-        ]))
-        
-        story.append(toc_table)
         story.append(PageBreak())
 
 
