@@ -2140,9 +2140,7 @@ elif section == "Submit":
             else:
                 dots = '.' * max(5, base_width - title_len)
 
-            line = f"{title} {dots} {page}"
-            story.append(Paragraph(line, toc_style))
-                    
+                                
             table_data.append([
                 Paragraph(f"{title} {dots}", toc_style),
                 Paragraph(str(page), toc_style)
