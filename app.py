@@ -2042,7 +2042,6 @@ elif section == "Submit":
         ]
 
         from reportlab.lib.styles import ParagraphStyle
-        from reportlab.lib.enums import TA_LEFT
         
         toc_style = ParagraphStyle(
             name="toc_item",
@@ -2060,18 +2059,8 @@ elif section == "Submit":
         # PAGE 2 — CONTENTS (FINAL STATIC)
         # =========================
 
-        from reportlab.lib.enums import TA_LEFT, TA_RIGHT
+        from reportlab.lib.enums import TA_LEFT
 
-
-        toc_style = ParagraphStyle(
-            name="toc_item",
-            fontSize=12,
-            leading=14,
-            leftIndent=40,
-            rightIndent=20,
-            alignment=TA_LEFT,
-            spaceAfter=2,
-        )
         
         toc_title_style = ParagraphStyle(
             name="toc_title",
@@ -2087,7 +2076,7 @@ elif section == "Submit":
 
         # TITLE (MATCHES WORD STYLE)
         def toc_line(title, page):
-            dots = "." * max(10, 85 - len(title))   # adjust 90 if needed
+            dots = "." * max(5, 95 - len(title))   # adjust 90 if needed
             return Paragraph(f"{title} {dots} {page}", toc_style)
 
         # CONTENT LIST
