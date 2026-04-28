@@ -1900,7 +1900,6 @@ elif section == "Submit":
             Image,
             PageBreak,
         )
-        from reportlab.lib import colors
         from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
         from reportlab.lib.units import inch
         from reportlab.pdfgen import canvas
@@ -2072,6 +2071,15 @@ elif section == "Submit":
             rightIndent=20,
             alignment=TA_LEFT,
             spaceAfter=6,
+        )
+        
+        toc_title_style = ParagraphStyle(
+            name="toc_title",
+            fontSize=18,
+            leading=22,
+            alignment=TA_LEFT,
+            textColor=colors.HexColor("#D35400"),
+            spaceAfter=20,
         )
 
         story.append(Spacer(1, 50))
