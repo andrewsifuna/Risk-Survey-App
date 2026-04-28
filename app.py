@@ -2273,10 +2273,11 @@ elif section == "Submit":
                 available_width * 0.38,  # Description (biggest)
                 available_width * 0.15,  # Cost Type
                 available_width * 0.25,  # Implementation Timeline
-            ]
+            ],
             rowHeights=[20, 22, 22, 22, 22],  # header + 4 rows
             hAlign='LEFT'
         )
+        
 
         # STYLE TABLE
         recommendation_table.setStyle(TableStyle([
