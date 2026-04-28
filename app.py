@@ -2125,11 +2125,24 @@ elif section == "Submit":
         # THEN BUILD TABLE
         table_data = []
 
-        max_chars = 105  # controls how far dots extend
+        max_chars = 90  # controls how far dots extend
+
+        base_width = 110   # overall width target
 
         for title, page in contents:
-            dots = '.' * max(5, max_chars - len(title))
+            title_len = len(title)
             
+            # dynamically adjust spacing
+            if title_len > 40:
+                dots = '.' * max(5, base_width - title_len - 10)
+            elif title_len > 30:
+                dots = '.' * max(5, base_width - title_len - 5)
+            else:
+                dots = '.' * max(5, base_width - title_len)
+
+            line = f"{title} {dots} {page}"
+            story.append(Paragraph(line, toc_style))
+                    
             table_data.append([
                 Paragraph(f"{title} {dots}", toc_style),
                 Paragraph(str(page), toc_style)
