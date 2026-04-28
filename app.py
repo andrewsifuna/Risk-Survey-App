@@ -11,7 +11,9 @@ from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_LEFT 
+from reportlab.lib.enums import TA_LEFT
+from reportlab.platypus import TabStop
+
 
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
@@ -2063,7 +2065,6 @@ elif section == "Submit":
         # PAGE 2 — CONTENTS (FINAL STATIC)
         # =========================
 
-        from reportlab.platypus import TabStop
         from reportlab.lib.enums import TA_LEFT, TA_RIGHT
 
         toc_style = ParagraphStyle(
