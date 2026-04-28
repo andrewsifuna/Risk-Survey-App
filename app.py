@@ -12,7 +12,6 @@ from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
-from reportlab.platypus import Table, TableStyle
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus.paragraph import Paragraph
@@ -21,6 +20,8 @@ from reportlab.lib.enums import TA_LEFT, TA_RIGHT
 from reportlab.lib.units import mm
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib import colors
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib.enums import TA_RIGHT
 
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
@@ -2122,15 +2123,34 @@ elif section == "Submit":
         
         
         # THEN BUILD TABLE
-            
         table_data = []
-        max_chars = 85  # adjust for spacing
-        
+
+        max_chars = 90  # controls how far dots extend
+
         for title, page in contents:
             dots = '.' * max(5, max_chars - len(title))
-            line = f"{title} {dots} {page}"
-            story.append(Paragraph(line, toc_style))
             
+            table_data.append([
+                Paragraph(f"{title} {dots}", toc_style),
+                Paragraph(str(page), toc_style)
+            ])
+
+        toc_table = Table(
+            table_data,
+            colWidths=[450, 50]  # LEFT column wide, RIGHT column fixed
+        )
+
+        toc_table.setStyle(TableStyle([
+            ('ALIGN', (1, 0), (1, -1), 'RIGHT'),  # page numbers right aligned
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ]))
+
+        story.append(toc_table)
+        
         story.append(PageBreak())
 
 
