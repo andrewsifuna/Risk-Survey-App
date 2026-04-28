@@ -2245,15 +2245,50 @@ elif section == "Submit":
 
         story.append(Spacer(1, 20))
 
-        story.append(Paragraph("7. RISK IMPROVEMENT RECOMMENDATIONS (SUMMARY)", section_title))
+        story.append(Paragraph("7. RISK IMPROVEMENT RECOMMENDATIONS", section_title))
 
-        rir = [["Recommendation", "Description", "Priority"]]
-        for r in d.get("rir", []):
-            rir.append(r)
+        # spacing after title
+        story.append(Spacer(1, SUBSECTION_SPACING))
 
-        t = Table(rir)
-        t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 1, colors.black)]))
-        story.append(t)
+        # TABLE HEADER + EMPTY ROWS
+        recommendation_table_data = [
+            ["Recommendation", "Description of Action", "Cost Type", "Implementation Timeline"],
+
+            ["", "", "", ""],
+            ["", "", "", ""],
+            ["", "", "", ""],
+            ["", "", "", ""],
+        ]
+
+        # CREATE TABLE
+        recommendation_table = Table(
+            recommendation_table_data,
+            colWidths=[130, 240, 90, 130]  # adjust proportions
+        )
+
+        # STYLE TABLE
+        recommendation_table.setStyle(TableStyle([
+            # Grid
+            ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
+
+            # Header styling
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#E6E6E6"),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+
+            # Alignment
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+
+            # Padding
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 8),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+            
+        ]))
+
+        story.append(recommendation_table)
+                
 
         story.append(PageBreak())
 
