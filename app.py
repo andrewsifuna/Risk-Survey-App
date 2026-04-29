@@ -2251,17 +2251,14 @@ elif section == "Submit":
         story.append(Spacer(1, SUBSECTION_SPACING))
 
         # TABLE HEADER + EMPTY ROWS
+        empty_row = [Paragraph("", normal) for _ in range(4)]
+
         recommendation_table_data = [
-            [
-                Paragraph("<b>Recommendation</b>", normal),
-                Paragraph("<b>Description of Action</b>", normal),
-                Paragraph("<b>Cost Type</b>", normal),
-                Paragraph("<b>Implementation<br/>Timeline</b>", normal),
-            ],
-            ["", "", "", ""],
-            ["", "", "", ""],
-            ["", "", "", ""],
-            ["", "", "", ""],
+            header_row,
+            empty_row,
+            empty_row,
+            empty_row,
+            empty_row,
         ],
 
         available_width = doc.width
