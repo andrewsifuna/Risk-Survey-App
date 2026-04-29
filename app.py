@@ -270,8 +270,6 @@ elif section == "Business Overview":
     d["business"] = st.text_input("Business")
     d["background"] = st.text_area("Background")
 
-elif section == "Site Buildings":
-    d["building_age"] = st.text_input("Building Details")
 
 elif section == "Situation":
     st.header("Situation")
