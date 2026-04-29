@@ -2266,10 +2266,10 @@ elif section == "Submit":
         recommendation_table = Table(
             recommendation_table_data,
             colWidths=[
-                available_width * 0.22,
-                available_width * 0.38,
-                available_width * 0.15,
                 available_width * 0.25,
+                available_width * 0.35,
+                available_width * 0.20,
+                available_width * 0.20,
             ],
             rowHeights=[20] + [22] * (len(recommendation_table_data) - 1),
             hAlign='LEFT'
