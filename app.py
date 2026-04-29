@@ -2257,7 +2257,7 @@ elif section == "Submit":
                 Paragraph("<b>Description of Action</b>", normal),
                 Paragraph("<b>Cost Type</b>", normal),
                 Paragraph("<b>Implementation<br/>Timeline</b>", normal),
-            ]
+            ],
 
             ["", "", "", ""],
             ["", "", "", ""],
