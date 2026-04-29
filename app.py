@@ -156,6 +156,9 @@ st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 # WELCOME
 # =========================
 if section == "Welcome":
+    if st.button("▶️ Begin Survey"):
+        next_step()
+        st.rerun()
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
@@ -2549,8 +2552,20 @@ else:
 # =========================
 # NAV BUTTONS
 # =========================
+# Initialize
+if "step" not in st.session_state:
+    st.session_state.step = 0
+
+# Define functions FIRST
+def next_step():
+    st.session_state.step += 1
+
+def prev_step():
+    st.session_state.step -= 1
+    
 if section != "Welcome":
     c1, c2, c3 = st.columns(3)
+    
 
     with c1:
         if st.session_state.step > 0:
