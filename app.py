@@ -2264,6 +2264,7 @@ elif section == "Submit":
             ["", "", "", ""],
             ["", "", "", ""],
         ]
+        available_width = doc.width
 
         # CREATE TABLE
         recommendation_table = Table(
