@@ -2272,8 +2272,8 @@ elif section == "Submit":
                 available_width * 0.22,
                 available_width * 0.38,
                 available_width * 0.15,
-                available_width * 0.25
-            ],  # ✅ KEEP THIS COMMA
+                available_width * 0.25,
+            ],
             rowHeights=[20, 22, 22, 22, 22],
             hAlign='LEFT'
         )
