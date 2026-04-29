@@ -2262,7 +2262,7 @@ elif section == "Submit":
             ["", "", "", ""],
             ["", "", "", ""],
             ["", "", "", ""],
-        ]
+        ],
 
         available_width = doc.width
 
