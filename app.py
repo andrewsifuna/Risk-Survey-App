@@ -2251,15 +2251,20 @@ elif section == "Submit":
         story.append(Spacer(1, SUBSECTION_SPACING))
 
         # TABLE HEADER + EMPTY ROWS
-        empty_row = [Paragraph("", normal) for _ in range(4)]
-
+        # TABLE HEADER + EMPTY ROWS
         recommendation_table_data = [
-            header_row,
-            empty_row,
-            empty_row,
-            empty_row,
-            empty_row,
-        ],
+            [
+                Paragraph("<b>Recommendation</b>", normal),
+                Paragraph("<b>Description of Action</b>", normal),
+                Paragraph("<b>Cost Type</b>", normal),
+                Paragraph("<b>Implementation<br/>Timeline</b>", normal),
+            ],
+
+            [" ", " ", " ", " "],
+            [" ", " ", " ", " "],
+            [" ", " ", " ", " "],
+            [" ", " ", " ", " "],
+        ]
 
         available_width = doc.width
 
@@ -2271,11 +2276,10 @@ elif section == "Submit":
                 available_width * 0.18,
                 available_width * 0.22,
             ],
-            rowHeights=[20] + [22] * (len(recommendation_table_data) - 1),
+            rowHeights=[20] + [22]*(len(recommendation_table_data) - 1),
             hAlign='LEFT'
         )
 
-        # STYLE TABLE
         recommendation_table.setStyle(TableStyle([
             # Grid
             ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
@@ -2283,19 +2287,19 @@ elif section == "Submit":
             # Header styling
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#E6E6E6")),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0,0), (-1,0), 10),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
 
-            # Alignment
-            ('ALIGN', (0,0), (-1,0), 'CENTER'),
-            ('VALIGN', (0,0), (-1,0), 'MIDDLE'),
+            # Body alignment
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
 
             # Padding
             ('LEFTPADDING', (0, 0), (-1, -1), 6),
             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-            ('TOPPADDING', (0,0), (-1,-1), 4),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
-            
-            
+            ('TOPPADDING', (0, 0), (-1, -1), 5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+
+            # Font size
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
         ]))
 
         story.append(recommendation_table)
