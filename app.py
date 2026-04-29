@@ -2549,12 +2549,13 @@ else:
 # =========================
 # NAV BUTTONS
 # =========================
-c1, c2, c3 = st.columns(3)
+if section != "Welcome":
+    c1, c2, c3 = st.columns(3)
 
-with c1:
-    if st.session_state.step > 0:
-        st.button("⬅️ Previous", on_click=prev_step)
+    with c1:
+        if st.session_state.step > 0:
+            st.button("⬅️ Previous", on_click=prev_step)
 
-with c3:
-    if st.session_state.step < len(sections) - 1:
-        st.button("Next ➡️", on_click=next_step)
+    with c3:
+        if st.session_state.step < len(sections) - 1:
+            st.button("Next ➡️", on_click=next_step)
