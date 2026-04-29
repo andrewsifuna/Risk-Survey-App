@@ -2253,13 +2253,15 @@ elif section == "Submit":
         # TABLE HEADER + EMPTY ROWS
         empty_row = [Paragraph("", normal) for _ in range(4)]
 
+        header_row = [
+            Paragraph("<b>Recommendation</b>", normal),
+            Paragraph("<b>Description of Action</b>", normal),
+            Paragraph("<b>Cost Type</b>", normal),
+            Paragraph("<b>Implementation<br/>Timeline</b>", normal),
+        ]
+
         recommendation_table_data = [
-            [
-                Paragraph("<b>Recommendation</b>", normal),
-                Paragraph("<b>Description of Action</b>", normal),
-                Paragraph("<b>Cost Type</b>", normal),
-                Paragraph("<b>Implementation<br/>Timeline</b>", normal),
-            ],
+            header_row,
             [Paragraph("", normal) for _ in range(4)],
             [Paragraph("", normal) for _ in range(4)],
             [Paragraph("", normal) for _ in range(4)],
@@ -2276,29 +2278,23 @@ elif section == "Submit":
                 available_width * 0.18,
                 available_width * 0.22,
             ],
-            rowHeights=[20] + [22]*(len(recommendation_table_data) - 1),
             hAlign='LEFT'
         )
 
         recommendation_table.setStyle(TableStyle([
-            # Grid
             ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
-
-            # Header styling
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#E6E6E6")),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
             ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
-
-            # Body alignment
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
 
-            # Padding
+            # 👇 add this
+            ('WORDWRAP', (0,0), (-1,-1), 'CJK'),
+
             ('LEFTPADDING', (0, 0), (-1, -1), 6),
             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
             ('TOPPADDING', (0, 0), (-1, -1), 5),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-
-            # Font size
             ('FONTSIZE', (0, 0), (-1, -1), 9),
         ]))
 
