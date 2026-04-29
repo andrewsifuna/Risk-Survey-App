@@ -118,7 +118,6 @@ sections = [
     "Client Info",
     "Contacts & Control",
     "Business Overview",
-    "Site Buildings",
     "Situation",
     "Exposure",
     "Storage",
