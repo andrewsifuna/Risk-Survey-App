@@ -2258,27 +2258,25 @@ elif section == "Submit":
                 Paragraph("<b>Cost Type</b>", normal),
                 Paragraph("<b>Implementation<br/>Timeline</b>", normal),
             ],
-
             ["", "", "", ""],
             ["", "", "", ""],
             ["", "", "", ""],
             ["", "", "", ""],
         ]
+
         available_width = doc.width
 
-        # CREATE TABLE
         recommendation_table = Table(
             recommendation_table_data,
             colWidths=[
-                available_width * 0.22,  # Recommendation
-                available_width * 0.38,  # Description (biggest)
-                available_width * 0.15,  # Cost Type
-                available_width * 0.25,  # Implementation Timeline
-            ],
-            rowHeights=[20, 22, 22, 22, 22],  # header + 4 rows
+                available_width * 0.22,
+                available_width * 0.38,
+                available_width * 0.15,
+                available_width * 0.25
+            ],  # ✅ KEEP THIS COMMA
+            rowHeights=[20, 22, 22, 22, 22],
             hAlign='LEFT'
         )
-        
 
         # STYLE TABLE
         recommendation_table.setStyle(TableStyle([
