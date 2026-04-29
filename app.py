@@ -2260,10 +2260,10 @@ elif section == "Submit":
                 Paragraph("<b>Cost Type</b>", normal),
                 Paragraph("<b>Implementation<br/>Timeline</b>", normal),
             ],
-            empty_row,
-            empty_row,
-            empty_row,
-            empty_row,
+            [Paragraph("", normal) for _ in range(4)],
+            [Paragraph("", normal) for _ in range(4)],
+            [Paragraph("", normal) for _ in range(4)],
+            [Paragraph("", normal) for _ in range(4)],
         ]
 
         available_width = doc.width
