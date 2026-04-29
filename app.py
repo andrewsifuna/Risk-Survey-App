@@ -156,9 +156,6 @@ st.markdown("<h1>🏦 Equity Risk Survey System</h1>", unsafe_allow_html=True)
 # WELCOME
 # =========================
 if section == "Welcome":
-    if st.button("▶️ Begin Survey"):
-        next_step()
-        st.rerun()
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
@@ -193,9 +190,14 @@ if section == "Welcome":
         # =========================
         # BUTTONS (CENTERED)
         # =========================
-
+        
         # BUTTONS (CENTERED)
-        b1, b2, b3 = st.columns(3)
+        b0, b1, b2, b3, b4 = st.columns([1, 2, 2, 2, 1])
+
+        with b1:
+            if st.button("▶️ Begin Survey"):
+                next_step()
+                st.rerun()
 
         with b2:
             if st.button("📄 View Reports"):
