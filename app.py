@@ -2274,7 +2274,7 @@ elif section == "Submit":
                 available_width * 0.15,
                 available_width * 0.25,
             ],
-            rowHeights=[20, 22, 22, 22, 22],
+            rowHeights=[20] + [22] * (len(recommendation_table_data) - 1),
             hAlign='LEFT'
         )
 
