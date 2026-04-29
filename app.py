@@ -1,3 +1,4 @@
+
 import streamlit as st
 import time
 import math
@@ -193,11 +194,6 @@ if section == "Welcome":
         # =========================
         # BUTTONS (CENTERED)
         # =========================
-        b1, b2, b3 = st.columns(3)
-
-        with b1:
-            if st.button("▶️ Begin Survey"):
-                next_step()
 
         with b2:
             if st.button("📄 View Reports"):
