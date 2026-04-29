@@ -2535,13 +2535,6 @@ elif section == "Submit":
         # =========================
         # BUILD PDF
         # =========================
-        def add_layout(canvas, doc):
-            canvas.setAuthor("Equity General Insurance (Kenya) Ltd.")
-            canvas.setTitle("Final Equity Risk Survey Report")
-            canvas.setSubject("Risk Survey Report")
-            canvas.setCreator("Equity Risk Survey System")
-
-
         doc.build(story, onFirstPage=add_layout, onLaterPages=add_layout)
 
         with open("final_equity_report.pdf", "rb") as f:
