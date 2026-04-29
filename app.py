@@ -23,6 +23,18 @@ from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 from reportlab.lib.enums import TA_RIGHT
 
+
+st.markdown("""
+<style>
+div.stButton > button {
+    width: 100%;
+    height: 60px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 class MyDocTemplate(SimpleDocTemplate):
     def afterFlowable(self, flowable):
         if isinstance(flowable, Paragraph):
@@ -192,19 +204,19 @@ if section == "Welcome":
         # =========================
         
         # BUTTONS (CENTERED)
-        b0, b1, b2, b3, b4 = st.columns([1, 2, 2, 2, 1])
+        b0, b1, b2, b3, b4 = st.columns([1, 3, 3, 3, 1])
 
         with b1:
-            if st.button("▶️ Begin Survey"):
+            if st.button("▶️ Begin"):
                 next_step()
                 st.rerun()
 
         with b2:
-            if st.button("📄 View Reports"):
+            if st.button("📄 Reports"):
                 st.info("Report viewer coming next...")
 
         with b3:
-            if st.button("🔄 Resume Survey"):
+            if st.button("🔄 Resume"):
                 st.info("Resume functionality coming next...")
 
 # =========================
